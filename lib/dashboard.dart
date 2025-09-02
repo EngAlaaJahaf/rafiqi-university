@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-// صفحة تسجيل الدخول 
-class Login extends StatelessWidget {
-  const Login({super.key});
+// لوحة التحكم
+class DashBoard extends StatelessWidget {
+  const DashBoard({super.key});
 
   @override
   Widget build(BuildContext context) {

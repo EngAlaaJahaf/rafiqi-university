@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-// صفحة تسجيل الدخول 
-class Login extends StatelessWidget {
-  const Login({super.key});
+// صفحة الملف الشخصي 
+class Profile extends StatelessWidget {
+  const Profile({super.key});
 
   @override
   Widget build(BuildContext context) {

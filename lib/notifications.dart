@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-// صفحة تسجيل الدخول 
-class Login extends StatelessWidget {
-  const Login({super.key});
+// صفحة الإشعارات 
+class Notifications extends StatelessWidget {
+  const Notifications({super.key});
 
   @override
   Widget build(BuildContext context) {
