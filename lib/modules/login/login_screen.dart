@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
+
+import '../../shared/components/components.dart';
 // صفحة تسجيل الدخول 
-class Login extends StatelessWidget {
-   Login({super.key});
+class LoginScreen extends StatelessWidget {
+   LoginScreen({super.key});
 var emailController = TextEditingController();
 var passwordController = TextEditingController();
   @override
@@ -74,16 +76,15 @@ var passwordController = TextEditingController();
                     ],
                    ),
                 // SizedBox(height: 10),
-                Container(
-                  width: double.infinity,
-                  color: Colors.blue,
-                  // color: Colors.blue,
-                  child: MaterialButton(
-                    onPressed: (){
-                      print(emailController.text);
-                      print(passwordController.text);
-                    },
-                     child: Text('تسجيل الدخول')),
+
+                DefaultButton(
+
+                  function: (){
+                    print(emailController.text);
+                    print(passwordController.text);
+                    Navigator.pushNamed(context, '/homescreen');
+                  },
+                  text: 'دخول',
                 ),
                   
               ],

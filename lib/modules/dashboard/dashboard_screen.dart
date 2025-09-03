@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 // لوحة التحكم
-class DashBoard extends StatelessWidget {
-  const DashBoard({super.key});
+class DashBoardScreen extends StatelessWidget {
+  const DashBoardScreen({super.key});
 
   @override
   Widget build(BuildContext context) {

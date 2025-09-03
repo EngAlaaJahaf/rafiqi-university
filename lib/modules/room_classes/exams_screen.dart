@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 // صفحة الإمتحانات 
-class Exams extends StatelessWidget {
-  const Exams({super.key});
+class ExamsScreen extends StatelessWidget {
+  const ExamsScreen({super.key});
 
   @override
   Widget build(BuildContext context) {

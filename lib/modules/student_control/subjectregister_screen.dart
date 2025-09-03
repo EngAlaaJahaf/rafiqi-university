@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 // صفحة تسجيل المواد 
-class SubjectRegister extends StatelessWidget {
-  const SubjectRegister({super.key});
+class SubjectRegisterScreen extends StatelessWidget {
+  const SubjectRegisterScreen({super.key});
 
   @override
   Widget build(BuildContext context) {

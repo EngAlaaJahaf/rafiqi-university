@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 // صفحة محاضرات الطالب
-class WeeklySchedule extends StatelessWidget {
-  const WeeklySchedule({super.key});
+class WeeklyScheduleScreen extends StatelessWidget {
+  const WeeklyScheduleScreen({super.key});
 
   @override
   Widget build(BuildContext context) {

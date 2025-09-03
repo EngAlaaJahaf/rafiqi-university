@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 // صفحة تتبع المذاكرة 
-class StudyTracker extends StatelessWidget {
-  const StudyTracker({super.key});
+class StudyTrackerScreen extends StatelessWidget {
+  const StudyTrackerScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
