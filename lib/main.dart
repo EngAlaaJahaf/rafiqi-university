@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:rafiqi_university/login.dart';
+import 'package:rafiqi_university/modules/login/login.dart';
 
 void main() {
   runApp(const MyApp(),);
