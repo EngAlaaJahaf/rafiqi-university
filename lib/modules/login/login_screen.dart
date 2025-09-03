@@ -76,8 +76,9 @@ var passwordController = TextEditingController();
                 // SizedBox(height: 10),
                 Container(
                   width: double.infinity,
+                  color: Colors.blue,
                   // color: Colors.blue,
-                  child: ElevatedButton(
+                  child: MaterialButton(
                     onPressed: (){
                       print(emailController.text);
                       print(passwordController.text);
