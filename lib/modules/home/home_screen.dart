@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:rafiqi_university/main.dart';
+import  'package:rafiqi_university/modules/dashboard/settings_screen.dart';
+// import 'package:rafiqi_university/main.dart';
 class HomeScreen extends StatelessWidget {
   // const HomeScreen({super.key});
 final VoidCallback toggleTheme;
@@ -18,8 +19,10 @@ const HomeScreen({Key? key , required this.toggleTheme}) :super(key: key);
            centerTitle: true,
            actions: [
             IconButton(
-              onPressed:(){} 
-            , icon: Icon(Icons.search)),
+              onPressed:(){
+                 Navigator.pushNamed(context, '/settingscreen');
+              } 
+            , icon: Icon(Icons.settings)),
             IconButton(
               onPressed:toggleTheme
             , icon: Icon(Icons.brightness_6_outlined)),

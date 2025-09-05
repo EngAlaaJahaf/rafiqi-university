@@ -1,11 +1,31 @@
 import 'package:flutter/material.dart';
-
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:rafiqi_university/main.dart';
 import '../../shared/components/components.dart';
 // صفحة تسجيل الدخول 
-class LoginScreen extends StatelessWidget {
+class LoginScreen extends StatefulWidget {
    LoginScreen({super.key});
-var emailController = TextEditingController();
+
+
+  @override
+  State<StatefulWidget> createState() => LoginScreenState();
+}
+class LoginScreenState extends State<LoginScreen>{
+  var emailController = TextEditingController();
 var passwordController = TextEditingController();
+
+@override
+  void initState() {
+    super.initState(); 
+  }
+
+void saveText (String email , String password) async {
+final prefs = await SharedPreferences.getInstance();
+prefs.setString('email',email);
+prefs.setString('password',password);
+
+}
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -78,11 +98,13 @@ var passwordController = TextEditingController();
                 // SizedBox(height: 10),
 
                 DefaultButton(
-
+                  
                   function: (){
                     print(emailController.text);
                     print(passwordController.text);
                     Navigator.pushNamed(context, '/homescreen');
+                    saveText(emailController.text,passwordController.text);
+                    
                   },
                   text: 'دخول',
                 ),
@@ -96,4 +118,6 @@ var passwordController = TextEditingController();
 
     );
   }
+  
+
 }

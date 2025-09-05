@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:rafiqi_university/modules/dashboard/dashboard_screen.dart';
+import 'package:rafiqi_university/modules/dashboard/settings_screen.dart';
 import 'package:rafiqi_university/modules/home/home_screen.dart';
 import 'package:rafiqi_university/modules/login/login_screen.dart';
 import 'package:rafiqi_university/modules/room_classes/lectures_screen.dart';
@@ -45,6 +46,7 @@ class _MyAppState extends State<MyApp> {
         '/homescreen': (context) => HomeScreen(toggleTheme: toggleTheme),
         '/dashBoardscreen': (context) => DashBoardScreen(),
         '/lecturesscreen': (context) => LecturesScreen(),
+        '/settingscreen': (context) => SettingsScreen(toggleTheme: toggleTheme),
       },
       initialRoute: '/',
       debugShowCheckedModeBanner: false,
