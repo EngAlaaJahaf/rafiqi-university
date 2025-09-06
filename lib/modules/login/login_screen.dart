@@ -21,8 +21,8 @@ bool isPassword = true;
 
 void saveText (String email , String password) async {
 final prefs = await SharedPreferences.getInstance();
-prefs.setString('email',email);
-prefs.setString('password',password);
+await prefs.setString('email',email);
+await prefs.setString('password',password);
 
 }
 
@@ -90,7 +90,9 @@ prefs.setString('password',password);
                     children: [
                      
                       TextButton(
-                        onPressed: (){},
+                        onPressed: (){
+                          Navigator.pushReplacementNamed(context, '/homescreen');
+                        },
                          child: Text('إنشئ حساب')),
                           Text('ليس لديك حساب'),
                     ],
@@ -102,8 +104,8 @@ prefs.setString('password',password);
                   function: (){
                     print(emailController.text);
                     print(passwordController.text);
-                    Navigator.pushNamed(context, '/homescreen');
-                    saveText(emailController.text,passwordController.text);
+                    Navigator.pushReplacementNamed(context, '/homescreen');
+                    // saveText(emailController.text,passwordController.text);
                     
                   },
                   text: 'دخول',

@@ -36,15 +36,16 @@ void loadData () async {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        leading: Icon(Icons.menu),
+        leading: IconButton(
+            onPressed:widget.toggleTheme,
+             icon: Icon(Icons.brightness_4)),
         title: Text('الإعدادات'),
         centerTitle: true,
         actions: [
-          IconButton(
-            onPressed:widget.toggleTheme,
-             icon: Icon(Icons.brightness_4)),
+          
         ],
       ),
+      endDrawer: customDrawer(context: context, toggleTheme: widget.toggleTheme),
     body: Column(
       // crossAxisAlignment: CrossAxisAlignment.end,
       

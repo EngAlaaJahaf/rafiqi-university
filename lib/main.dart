@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:rafiqi_university/modules/dashboard/dashboard_screen.dart';
+import 'package:rafiqi_university/modules/dashboard/notifications_screen.dart';
+import 'package:rafiqi_university/modules/dashboard/profile_screen.dart';
 import 'package:rafiqi_university/modules/dashboard/settings_screen.dart';
 import 'package:rafiqi_university/modules/home/home_screen.dart';
 import 'package:rafiqi_university/modules/login/login_screen.dart';
@@ -43,9 +45,11 @@ class _MyAppState extends State<MyApp> {
     return MaterialApp(
       routes: {
         '/': (context) => LoginScreen(),
-        '/homescreen': (context) => HomeScreen(toggleTheme: toggleTheme),
-        '/dashBoardscreen': (context) => DashBoardScreen(),
+        '/homescreen': (context) => HomeScreen(toggleTheme: toggleTheme , context: context),
+        '/dashboardscreen': (context) => DashBoardScreen(toggleTheme: toggleTheme),
         '/lecturesscreen': (context) => LecturesScreen(),
+        '/notificationsscreen': (context) => NotificationsScreen(toggleTheme: toggleTheme),
+        '/profilescreen': (context) => ProfileScreen(toggleTheme: toggleTheme),
         '/settingscreen': (context) => SettingsScreen(toggleTheme: toggleTheme),
       },
       initialRoute: '/',
