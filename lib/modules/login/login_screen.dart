@@ -4,7 +4,7 @@ import 'package:rafiqi_university/main.dart';
 import '../../shared/components/components.dart';
 // صفحة تسجيل الدخول 
 class LoginScreen extends StatefulWidget {
-   LoginScreen({super.key});
+   const LoginScreen({super.key});
 
 
   @override
@@ -13,7 +13,7 @@ class LoginScreen extends StatefulWidget {
 class LoginScreenState extends State<LoginScreen>{
   var emailController = TextEditingController();
 var passwordController = TextEditingController();
-
+bool isPassword = true;
 @override
   void initState() {
     super.initState(); 

@@ -5,7 +5,7 @@ class HomeScreen extends StatelessWidget {
   // const HomeScreen({super.key});
 final VoidCallback toggleTheme;
 // const HomeScreen({Key? key, required this.toggleTheme}) : super(key: key);
-const HomeScreen({Key? key , required this.toggleTheme}) :super(key: key);
+const HomeScreen({super.key , required this.toggleTheme});
 // MyApp({Key? key,required this. initialDarkMode}) :super(key: key);
   @override
   Widget build(BuildContext context) {

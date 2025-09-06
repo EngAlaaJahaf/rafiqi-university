@@ -16,7 +16,7 @@ void main() async {
 class MyApp extends StatefulWidget {
   //  MyApp({super.key});
   final bool initialDarkMode;
-  MyApp({Key? key, required this.initialDarkMode}) : super(key: key);
+  const MyApp({super.key, required this.initialDarkMode});
 
   @override
   State<MyApp> createState() => _MyAppState();

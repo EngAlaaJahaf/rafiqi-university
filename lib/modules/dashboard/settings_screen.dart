@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:rafiqi_university/main.dart';
 import 'package:rafiqi_university/shared/components/components.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import  'package:rafiqi_university/modules/dashboard/settings_screen.dart';
 // صفحة الإعدادات 
 class SettingsScreen extends StatefulWidget {
   // const SettingsScreen({super.key});
