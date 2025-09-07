@@ -14,13 +14,13 @@ class DashBoardScreen extends StatelessWidget {
         title: Text('لوحة التحكم'),
         centerTitle: true,
       ),
-      endDrawer: customDrawer(context: context, toggleTheme: toggleTheme),
+      // endDrawer: customDrawer(context: context, toggleTheme: toggleTheme),
       body: Center(
         child: Text('صفحة لوحة التحكم',
         style: TextStyle(fontSize: 40,fontWeight: FontWeight.bold),),
       ),
       floatingActionButton :customFloatingActionButton(context),
-      bottomNavigationBar:custombottomNavigationBar(context),
+      // bottomNavigationBar:custombottomNavigationBar(context),
       floatingActionButtonLocation: FloatingActionButtonLocation.endDocked,
     );
   }

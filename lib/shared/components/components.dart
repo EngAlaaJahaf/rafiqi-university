@@ -7,7 +7,7 @@ Widget DefaultButton({
   bool isUpperCase = true,
   double radius = 10.0,
   required VoidCallback function,
-  required String text,
+  required String text, required TextEditingController emailController, required TextEditingController passwordController, required Future<void> Function() onPressed, required Text child,
 }) =>
     Container(
       width: width,
@@ -177,165 +177,165 @@ return Card(
 
 //==================-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
 //قائمة جانبية مخصصة مع خيار تبديل الوضع الداكن
-Widget customDrawer({required BuildContext context, required dynamic toggleTheme}) {
-  return Drawer(
-    child: ListView(
-      // مهم: لإزالة أي مسافات إضافية من الأعلى
-      padding: EdgeInsets.zero,
-      children: [
-        UserAccountsDrawerHeader(
-          // صورة المستخدم الحالية
-          currentAccountPicture: CircleAvatar(
-            backgroundImage: NetworkImage('https://picsum.photos/200' ),
-          ),
-          // اسم المستخدم
-          accountName: Text(
-            'اسم المستخدم',
-            style: TextStyle(fontWeight: FontWeight.bold,color: const Color.fromARGB(255, 13, 121, 121)),
-          ),
+// Widget customDrawer({required BuildContext context, required dynamic toggleTheme}) {
+//   return Drawer(
+//     child: ListView(
+//       // مهم: لإزالة أي مسافات إضافية من الأعلى
+//       padding: EdgeInsets.zero,
+//       children: [
+//         UserAccountsDrawerHeader(
+//           // صورة المستخدم الحالية
+//           currentAccountPicture: CircleAvatar(
+//             backgroundImage: NetworkImage('https://picsum.photos/200' ),
+//           ),
+//           // اسم المستخدم
+//           accountName: Text(
+//             'اسم المستخدم',
+//             style: TextStyle(fontWeight: FontWeight.bold,color: const Color.fromARGB(255, 13, 121, 121)),
+//           ),
           
-          // البريد الإلكتروني
-          accountEmail: Text('user.email@example.com',
-          style: TextStyle(fontWeight: FontWeight.bold,color: const Color.fromARGB(255, 13, 121, 121)),),
-          // أيقونات أخرى (مثل حالة الاتصال)
-          otherAccountsPictures: [
+//           // البريد الإلكتروني
+//           accountEmail: Text('user.email@example.com',
+//           style: TextStyle(fontWeight: FontWeight.bold,color: const Color.fromARGB(255, 13, 121, 121)),),
+//           // أيقونات أخرى (مثل حالة الاتصال)
+//           otherAccountsPictures: [
             
-            // Icon(
-            //   Icons.circle,
-            //   color: const Color.fromARGB(255, 22, 248, 67),
-            //   size: 14,
-            // ),
-            IconButton(
-              onPressed:toggleTheme
-            , icon: CircleAvatar(
-              child:Icon(Icons.brightness_6_outlined))),
-          ],
-          // تصميم خلفية الهيدر
-          decoration: BoxDecoration(
-            // image: DecorationImage(
-            //   image: NetworkImage('https://picsum.photos/300/200' ),
-            //   fit: BoxFit.cover,
-            // ),
-          ),
-        ),
+//             // Icon(
+//             //   Icons.circle,
+//             //   color: const Color.fromARGB(255, 22, 248, 67),
+//             //   size: 14,
+//             // ),
+//             IconButton(
+//               onPressed:toggleTheme
+//             , icon: CircleAvatar(
+//               child:Icon(Icons.brightness_6_outlined))),
+//           ],
+//           // تصميم خلفية الهيدر
+//           decoration: BoxDecoration(
+//             // image: DecorationImage(
+//             //   image: NetworkImage('https://picsum.photos/300/200' ),
+//             //   fit: BoxFit.cover,
+//             // ),
+//           ),
+//         ),
         
-        // -- عناصر القائمة --
-        ListTile(
-          leading: Icon(Icons.person_pin_outlined),
-          title: Text('الملف الشخصي'),
-          onTap: () {
-            Navigator.pop(context);
-            // Navigator.pushNamed(context, '/dashboardscreen');
-            Navigator.pushReplacementNamed(context, '/profilescreen');
-          },
-        ),
-        ListTile(
-          leading: Icon(Icons.home_outlined),
-          title: Text('الصفحة الرئيسية'),
-          onTap: () {
-            // أغلق القائمة ثم انتقل
-            // Navigator.pop(context); 
-            // Navigator.pushNamed(context, '/homescreen');
-            Navigator.pushReplacementNamed(context, '/homescreen');
-          },
-          //
-        ),
-        ListTile(
-          leading: Icon(Icons.dashboard_outlined),
-          title: Text('لوحة التحكم'),
-          onTap: () {
-            Navigator.pop(context);
-            // Navigator.pushNamed(context, '/dashboardscreen');
-            Navigator.pushReplacementNamed(context, '/dashboardscreen');
-          },
-        ),
-        ListTile(
-          leading: Icon(Icons.book_outlined),
-          title: Text('المحاضرات'),
-          onTap: () {
-            Navigator.pop(context);
-            Navigator.pushNamed(context, '/lecturesscreen');
-          },
-        ),
+//         // -- عناصر القائمة --
+//         ListTile(
+//           leading: Icon(Icons.person_pin_outlined),
+//           title: Text('الملف الشخصي'),
+//           onTap: () {
+//             Navigator.pop(context);
+//             // Navigator.pushNamed(context, '/dashboardscreen');
+//             // Navigator.pushReplacementNamed(context, '/profilescreen');
+//           },
+//         ),
+//         ListTile(
+//           leading: Icon(Icons.home_outlined),
+//           title: Text('الصفحة الرئيسية'),
+//           onTap: () {
+//             // أغلق القائمة ثم انتقل
+//             // Navigator.pop(context); 
+//             // Navigator.pushNamed(context, '/homescreen');
+//             // Navigator.pushReplacementNamed(context, '/homescreen');
+//           },
+//           //
+//         ),
+//         ListTile(
+//           leading: Icon(Icons.dashboard_outlined),
+//           title: Text('لوحة التحكم'),
+//           onTap: () {
+//             Navigator.pop(context);
+//             // Navigator.pushNamed(context, '/dashboardscreen');
+//             // Navigator.pushReplacementNamed(context, '/dashboardscreen');
+//           },
+//         ),
+//         ListTile(
+//           leading: Icon(Icons.book_outlined),
+//           title: Text('المحاضرات'),
+//           onTap: () {
+//             Navigator.pop(context);
+//             // Navigator.pushNamed(context, '/lecturesscreen');
+//           },
+//         ),
         
-        // خط فاصل لتنظيم القائمة
-        Divider(), 
+//         // خط فاصل لتنظيم القائمة
+//         Divider(), 
 
-        ListTile(
-          leading: Icon(Icons.settings_outlined),
-          title: Text('الإعدادات'),
-          onTap: () {
-            Navigator.pop(context);
-            Navigator.pushNamed(context, '/settingscreen');
-          },
-        ),
-        ListTile(
-          leading: Icon(Icons.logout),
-          title: Text('تسجيل الخروج'),
-          onTap: () {
-            // أغلق القائمة أولاً
-            Navigator.pop(context);
+//         ListTile(
+//           leading: Icon(Icons.settings_outlined),
+//           title: Text('الإعدادات'),
+//           onTap: () {
+//             Navigator.pop(context);
+//             Navigator.pushNamed(context, '/settingscreen');
+//           },
+//         ),
+//         ListTile(
+//           leading: Icon(Icons.logout),
+//           title: Text('تسجيل الخروج'),
+//           onTap: () {
+//             // أغلق القائمة أولاً
+//             Navigator.pop(context);
 
-            // ثم أظهر رسالة الخروج
-            SnackBar snackBar = SnackBar(
-              content: Text('تم تسجيل الخروج بنجاح'),
-              duration: Duration(seconds: 2),
-            );
-            ScaffoldMessenger.of(context).showSnackBar(snackBar);
+//             // ثم أظهر رسالة الخروج
+//             SnackBar snackBar = SnackBar(
+//               content: Text('تم تسجيل الخروج بنجاح'),
+//               duration: Duration(seconds: 2),
+//             );
+//             ScaffoldMessenger.of(context).showSnackBar(snackBar);
             
-            // يمكنك هنا إضافة منطق تسجيل الخروج الفعلي
-            // والانتقال إلى شاشة تسجيل الدخول
-            // Navigator.pushReplacementNamed(context, '/login');
-          },
-        ),
-      ],
-    ),
-  );
-}
+//             // يمكنك هنا إضافة منطق تسجيل الخروج الفعلي
+//             // والانتقال إلى شاشة تسجيل الدخول
+//             // Navigator.pushReplacementNamed(context, '/login');
+//           },
+//         ),
+//       ],
+//     ),
+//   );
+// }
 
 
 //==================-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=->
 //قائمة تنقل سفلية بسيطة مع زر عائم محفور
-Widget custombottomNavigationBar(BuildContext context) {
-return  BottomAppBar(
-        shape: CircularNotchedRectangle(),
-        notchMargin: 6.0,
-        child: Row(
-          mainAxisSize: MainAxisSize.max,
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: <Widget>[
-            IconButton(
-              icon: Icon(Icons.home),
-              onPressed: () {
-                Navigator.pushReplacementNamed(context, '/homescreen');
-              },
-            ),
-            IconButton(
-              icon: Icon(Icons.home),
-              onPressed: () {
-                Navigator.pushReplacementNamed(context, '/homescreen');
-              },
-            ),
-            IconButton(
-              icon: Icon(Icons.home),
-              onPressed: () {
-                Navigator.pushReplacementNamed(context, '/homescreen');
-              },
-            ),
-            Text(
-               '.'),
+// Widget custombottomNavigationBar(BuildContext context) {
+// return  BottomAppBar(
+//         shape: CircularNotchedRectangle(),
+//         notchMargin: 6.0,
+//         child: Row(
+//           mainAxisSize: MainAxisSize.max,
+//           mainAxisAlignment: MainAxisAlignment.spaceBetween,
+//           children: <Widget>[
+//             IconButton(
+//               icon: Icon(Icons.home),
+//               onPressed: () {
+//                 Navigator.pushReplacementNamed(context, '/homescreen');
+//               },
+//             ),
+//             IconButton(
+//               icon: Icon(Icons.home),
+//               onPressed: () {
+//                 Navigator.pushReplacementNamed(context, '/homescreen');
+//               },
+//             ),
+//             IconButton(
+//               icon: Icon(Icons.home),
+//               onPressed: () {
+//                 Navigator.pushReplacementNamed(context, '/homescreen');
+//               },
+//             ),
+//             Text(
+//                '.'),
               
             
-            // IconButton(
-            //   icon: Icon(Icons.person),
-            //   onPressed: () {
-            //     // Navigator.pushReplacementNamed(context, '/profilescreen');
-            //   },
-            // ),
-          ],
-        ),
-      );
-}
+//             // IconButton(
+//             //   icon: Icon(Icons.person),
+//             //   onPressed: () {
+//             //     // Navigator.pushReplacementNamed(context, '/profilescreen');
+//             //   },
+//             // ),
+//           ],
+//         ),
+//       );
+// }
 
 
       //الزر العائم منسق مع قائمة التنقل السفلية مع الخاصية التالية

@@ -34,19 +34,7 @@ void loadData () async {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        leading: IconButton(
-            onPressed:widget.toggleTheme,
-             icon: Icon(Icons.brightness_4)),
-        title: Text('الإعدادات'),
-        centerTitle: true,
-        actions: [
-          
-        ],
-      ),
-      endDrawer: customDrawer(context: context, toggleTheme: widget.toggleTheme),
-    body: Column(
+    return Center(child: Column(
       // crossAxisAlignment: CrossAxisAlignment.end,
       
       children: [
@@ -63,6 +51,18 @@ containerCard(
 // header: 'البيانات المحفوظة' ),
       ],
     ),
+      // appBar: AppBar(
+      //   leading: IconButton(
+      //       onPressed:widget.toggleTheme,
+      //        icon: Icon(Icons.brightness_4)),
+      //   title: Text('الإعدادات'),
+      //   centerTitle: true,
+      //   actions: [
+          
+      //   ],
+      // ),
+      // endDrawer: customDrawer(context: context, toggleTheme: widget.toggleTheme),
+     
     );
   }
   

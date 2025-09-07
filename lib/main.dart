@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:rafiqi_university/layout/mainlayoutwidget.dart';
 import 'package:rafiqi_university/modules/dashboard/dashboard_screen.dart';
 import 'package:rafiqi_university/modules/dashboard/notifications_screen.dart';
 import 'package:rafiqi_university/modules/dashboard/profile_screen.dart';
@@ -43,25 +44,25 @@ class _MyAppState extends State<MyApp> {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      routes: {
-        '/': (context) => LoginScreen(),
-        '/homescreen': (context) => HomeScreen(toggleTheme: toggleTheme , context: context),
-        '/dashboardscreen': (context) => DashBoardScreen(toggleTheme: toggleTheme),
-        '/lecturesscreen': (context) => LecturesScreen(),
-        '/notificationsscreen': (context) => NotificationsScreen(toggleTheme: toggleTheme),
-        '/profilescreen': (context) => ProfileScreen(toggleTheme: toggleTheme),
-        '/settingscreen': (context) => SettingsScreen(toggleTheme: toggleTheme),
-      },
-      initialRoute: '/',
+      // routes: {
+      //   '/': (context) =>  LoginScreen(),
+      //   '/homescreen': (context) => HomeScreen(toggleTheme: toggleTheme , context: context, currentIndex: 0,),
+      //   '/dashboardscreen': (context) => DashBoardScreen(toggleTheme: toggleTheme),
+      //   '/lecturesscreen': (context) => LecturesScreen(),
+      //   '/notificationsscreen': (context) => NotificationsScreen(toggleTheme: toggleTheme),
+      //   '/profilescreen': (context) => ProfileScreen(toggleTheme: toggleTheme),
+      //   '/settingscreen': (context) => SettingsScreen(toggleTheme: toggleTheme),
+      // },
+      // initialRoute: '/',
       debugShowCheckedModeBanner: false,
       title: 'رفيقي الجامعي',
 
       theme: ThemeData.light().copyWith(
-        primaryColor: Colors.blue,
+        primaryColor: const Color.fromARGB(255, 33, 152, 243),
         appBarTheme: AppBarTheme(
-          backgroundColor: Colors.lightBlue,
+          backgroundColor: const Color.fromARGB(255, 3, 140, 244),
           iconTheme: IconThemeData(
-            color: const Color.fromARGB(255, 1, 0, 0),
+            color: const Color.fromARGB(255, 240, 231, 231),
           ),
           titleTextStyle: TextStyle(
             color: Colors.white,
@@ -69,7 +70,7 @@ class _MyAppState extends State<MyApp> {
             fontWeight: FontWeight.bold,
           ),
         ),
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.lightBlueAccent),
+        colorScheme: ColorScheme.fromSeed(seedColor: const Color.fromARGB(255, 141, 235, 237)),
       ),
       darkTheme: ThemeData.dark()
       // .copyWith(
@@ -88,7 +89,7 @@ class _MyAppState extends State<MyApp> {
         // ),
       ,
       themeMode: isDarkMode ? ThemeMode.dark : ThemeMode.light,
-      // home:  LoginScreen(),
+      home:  LoginScreen(toggleTheme:toggleTheme,),
     );
   }
 }

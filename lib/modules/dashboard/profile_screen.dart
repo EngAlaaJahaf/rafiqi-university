@@ -8,25 +8,17 @@ class ProfileScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context, ) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text('الملف الشخصي'),
-        centerTitle: true,
-        
-      ),
-        endDrawer: customDrawer(toggleTheme: toggleTheme,
-        context: context
-      ),
-      body: Center(
+    return 
+       Center(
         child: Text('صفحة الملف الشخصي',
         style: TextStyle(fontSize: 40,fontWeight: FontWeight.bold),),
-      ),
+      );
     
-      floatingActionButtonLocation: FloatingActionButtonLocation.endDocked,
-     floatingActionButton :customFloatingActionButton(context),
-      bottomNavigationBar:custombottomNavigationBar(context),
+    //   floatingActionButtonLocation: FloatingActionButtonLocation.endDocked,
+    //  floatingActionButton :customFloatingActionButton(context),
+    //   bottomNavigationBar:custombottomNavigationBar(context),
       
      
-    );
+    
   }
 }

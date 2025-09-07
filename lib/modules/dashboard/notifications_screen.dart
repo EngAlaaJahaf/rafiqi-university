@@ -8,19 +8,14 @@ class NotificationsScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context,  ) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text('الإشعارات'),
-        centerTitle: true,
-      ),
-      body: Center(
+    return  Center(
         child: Text('صفحة الإشعارات',
         style: TextStyle(fontSize: 40,fontWeight: FontWeight.bold),),
-      ),
-      floatingActionButton :customFloatingActionButton(context,pageName: '/settingscreen',),
-      bottomNavigationBar:custombottomNavigationBar(context),
-      floatingActionButtonLocation: FloatingActionButtonLocation.endDocked,
-      endDrawer: customDrawer(context: context, toggleTheme: toggleTheme),
-    );
+      );
+      // floatingActionButton :customFloatingActionButton(context,pageName: '/settingscreen',),
+      // bottomNavigationBar:custombottomNavigationBar(context),
+      // floatingActionButtonLocation: FloatingActionButtonLocation.endDocked,
+      // endDrawer: customDrawer(context: context, toggleTheme: toggleTheme),
+    
   }
 }
