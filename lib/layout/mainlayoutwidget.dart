@@ -8,6 +8,7 @@ import 'package:rafiqi_university/modules/home/home_screen.dart';
 import 'package:rafiqi_university/modules/dashboard/notifications_screen.dart';
 import 'package:rafiqi_university/modules/dashboard/profile_screen.dart';
 import 'package:rafiqi_university/modules/dashboard/settings_screen.dart';
+import 'package:rafiqi_university/modules/student_control/view_subjects_screen.dart';
 
 class MainLayoutWidget extends StatefulWidget {
   final VoidCallback toggleTheme;
@@ -29,7 +30,7 @@ class _MainLayoutWidgetState extends State<MainLayoutWidget> {
     _screens = [
       HomeScreen(toggleTheme: widget.toggleTheme,),
       NotificationsScreen(toggleTheme: widget.toggleTheme),
-      ProfileScreen(toggleTheme: widget.toggleTheme),
+      ViewSubjectsScreen(toggleTheme: widget.toggleTheme),
       SettingsScreen(toggleTheme: widget.toggleTheme),
     ];
   }

@@ -11,6 +11,7 @@ import 'package:rafiqi_university/modules/home/home_screen.dart';
 import 'package:rafiqi_university/modules/dashboard/notifications_screen.dart';
 import 'package:rafiqi_university/modules/dashboard/profile_screen.dart';
 import 'package:rafiqi_university/modules/dashboard/settings_screen.dart';
+import 'package:rafiqi_university/modules/student_control/view_subjects_screen.dart';
 
 // 2. تم تصحيح اسم الكلاس
 class MainLayoutWidget extends StatefulWidget {
@@ -36,13 +37,14 @@ late final List<String> _titles;
     _screens = [
       HomeScreen(toggleTheme: widget.toggleTheme),
       NotificationsScreen(toggleTheme: widget.toggleTheme),
-      ProfileScreen(toggleTheme: widget.toggleTheme),
+      ViewSubjectsScreen(toggleTheme: widget.toggleTheme),
       SettingsScreen(toggleTheme: widget.toggleTheme),
+      
     ];
     _titles = [
      'الرئيسية',
      'الإشعارات',
-     'الملف الشخصي',
+     'المواد الدراسية',
      'الإعدادات',
     ];
   }

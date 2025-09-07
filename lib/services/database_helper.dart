@@ -1,12 +1,8 @@
 import 'package:rafiqi_university/model/subject.dart';
+import 'package:rafiqi_university/model/lecture.dart';
 import 'package:sqflite/sqflite.dart';
 import 'package:path/path.dart';
 
-// هذا هو كلاس الـ Model الذي يمثل جدول المواد
-// من الأفضل وضعه في ملف منفصل مثل 'lib/models/subject.dart'
-
-
-// -----------------------------------------------------------------
 
 
 class DatabaseHelper {
@@ -134,9 +130,54 @@ class DatabaseHelper {
   }
 
 
-  // --- يمكنك إضافة دوال CRUD لبقية الجداول هنا ---
-  // مثال: Future<int> createLecture(Lecture lecture) async { ... }
-  // مثال: Future<List<Assignment>> getAllAssignments() async { ... }
+  // --- 5. دوال CRUD لجدول المحاضرات (Lectures) ---
+
+  // C - Create: إضافة محاضرة جديدة
+  Future<int> createLecture(Lecture lecture) async {
+    final db = await instance.database;
+    return await db.insert('lectures', lecture.toMap());
+  }
+
+  // R - Read: قراءة كل المحاضرات
+  Future<List<Lecture>> getAllLectures() async {
+    final db = await instance.database;
+    final result = await db.query('lectures', orderBy: 'lecture_date DESC');
+    return result.map((json) => Lecture.fromMap(json)).toList();
+  }
+  
+    // R - Read: قراءة كل المحاضرات لمادة معينة
+  Future<List<Lecture>> getLecturesForSubject(int subjectId) async {
+    final db = await instance.database;
+    final result = await db.query(
+      'lectures',
+      where: 'subject_id = ?',
+      whereArgs: [subjectId],
+      orderBy: 'lecture_date DESC',
+    );
+    return result.map((json) => Lecture.fromMap(json)).toList();
+  }
+
+
+  // U - Update: تحديث محاضرة
+  Future<int> updateLecture(Lecture lecture) async {
+    final db = await instance.database;
+    return await db.update(
+      'lectures',
+      lecture.toMap(),
+      where: 'id = ?',
+      whereArgs: [lecture.id],
+    );
+  }
+
+  // D - Delete: حذف محاضرة
+  Future<int> deleteLecture(int id) async {
+    final db = await instance.database;
+    return await db.delete(
+      'lectures',
+      where: 'id = ?',
+      whereArgs: [id],
+    );
+  }
 
 
   // دالة لإغلاق قاعدة البيانات عند عدم الحاجة إليها

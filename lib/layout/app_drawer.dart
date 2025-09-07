@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:rafiqi_university/modules/student_control/view_subjects_screen.dart';
 
 class AppDrawer extends StatelessWidget {
   final int currentIndex; // ✨ 1. استقبل الـ index الحالي
@@ -84,7 +85,31 @@ class AppDrawer extends StatelessWidget {
           ),
           
           const Divider(),
-
+//--------------------------------------------------
+          // ListTile(
+          //   leading: const Icon(Icons.book_outlined),
+          //   title: const Text('المواد الدراسية'),
+          //   onTap: () {
+          //     Navigator.pop(context); // أغلق القائمة
+          //     Navigator.push(
+          //       context,
+          //       MaterialPageRoute(builder: (context) => const ViewSubjectsScreen()),
+          //     );
+          //   },
+          // ),
+//=================================
+        // ListTile(
+        //     leading: const Icon(Icons.book_outlined),
+        //     title: const Text('المواد الدراسية'),
+        //     onTap: () {
+        //       Navigator.pop(context); // أغلق القائمة
+        //       Navigator.push(
+        //         context,
+        //         MaterialPageRoute(builder: (context) => const ViewSubjectsScreen(toggleTheme: () {  },)),
+        //       );
+        //     },
+        //   ),
+//-=-=-=-=-=-=
           ListTile(
             leading: const Icon(Icons.settings_outlined),
             title: const Text('الإعدادات'),

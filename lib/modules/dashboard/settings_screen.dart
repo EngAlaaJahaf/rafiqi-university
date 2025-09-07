@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:rafiqi_university/shared/components/components.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:rafiqi_university/services/json_file.dart';
+
 // صفحة الإعدادات 
 class SettingsScreen extends StatefulWidget {
   // const SettingsScreen({super.key});
@@ -15,14 +17,25 @@ class SettingsScreenState extends State <SettingsScreen> {
  bool switchValue = false;
   String email = "";
   String password = "";
+  Map<String, dynamic>? _studentData;
+  final StorageService _storageService = StorageService();
 //  late VoidCallback toggleTheme;
 @override
   void initState() {
     super.initState();
     loadData();
+    _loadStudentData();
     
 
   }
+
+  void _loadStudentData() async {
+    final data = await _storageService.readStudentData();
+    setState(() {
+      _studentData = data;
+    });
+  }
+
 void loadData () async {
  final prefs = await SharedPreferences.getInstance();
     setState(() {
@@ -34,7 +47,7 @@ void loadData () async {
 
   @override
   Widget build(BuildContext context) {
-    return Center(child: Column(
+    return SingleChildScrollView(child: Column(
       // crossAxisAlignment: CrossAxisAlignment.end,
       
       children: [
@@ -42,13 +55,25 @@ void loadData () async {
       //   text:'البيانات المحفوظة'),
       
 containerCard(
-  header: 'البيانات المحفوظة',
+  header: 'البيانات المحفوظة (SharedPreferences)',
    text: 'الإيميل : $email',
   text1: 'كلمة المرور : $password',
  
 ),
-// cardCustom(body: 'الإيميل : $email',
-// header: 'البيانات المحفوظة' ),
+if (_studentData != null)
+  containerCard(
+    header: 'بيانات الطالب (JSON)',
+    text: 'الاسم: ${_studentData!['name'] ?? 'N/A'}',
+    text1: 'الرقم الجامعي: ${_studentData!['id'] ?? 'N/A'}',
+    // You can add more fields like this:
+    text4: 'التخصص: ${_studentData!['major'] ?? 'N/A'}',
+    footer: 'المستوى: ${_studentData!['level'] ?? 'N/A'}',
+  )
+else
+  Padding(
+    padding: const EdgeInsets.all(16.0),
+    child: Text('لا توجد بيانات طالب محفوظة في ملف JSON.'),
+  ),
       ],
     ),
       // appBar: AppBar(

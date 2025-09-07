@@ -29,7 +29,7 @@ class CustomBottomNavBar extends StatelessWidget {
           _buildNavItem(context, Icons.home, 'الرئيسية', 0),
           _buildNavItem(context, Icons.notifications, 'الإشعارات', 1),
           const SizedBox(width: 40), // مسافة للزر العائم
-          _buildNavItem(context, Icons.person, 'الملف الشخصي', 2),
+          _buildNavItem(context, Icons.person, 'المواد الدراسية', 2),
           _buildNavItem(context, Icons.settings, 'الإعدادات', 3),
         ],
       ),

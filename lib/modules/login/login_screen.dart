@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:rafiqi_university/layout/mainlayoutwidget.dart';
+import 'package:rafiqi_university/modules/login/signin.dart';
 import 'package:rafiqi_university/shared/components/components.dart';
 // import 'package:rafiqi_university/layout/main_layout.dart' ; // 1. تأكد من صحة هذا المسار
 import 'package:shared_preferences/shared_preferences.dart';
@@ -129,6 +130,11 @@ class _LoginScreenState extends State<LoginScreen> {
                     TextButton(
                       onPressed: () {
                         // يمكنك هنا الانتقال إلى شاشة إنشاء حساب
+                        Navigator.of(context).pushReplacement(
+                      MaterialPageRoute(
+                        builder: (context) =>
+                            SignInScreen(toggleTheme: widget.toggleTheme),
+                      ),);
                       },
                       child: const Text('إنشاء حساب'),
                     ),
