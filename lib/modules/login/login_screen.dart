@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:get/get_core/src/get_main.dart';
 import 'package:rafiqi_university/layout/mainlayoutwidget.dart';
+import 'package:rafiqi_university/modules/login/login_controller.dart';
 import 'package:rafiqi_university/modules/login/signin.dart';
 import 'package:rafiqi_university/shared/components/components.dart';
 // import 'package:rafiqi_university/layout/main_layout.dart' ; // 1. تأكد من صحة هذا المسار
@@ -19,6 +22,7 @@ class LoginScreen extends StatefulWidget {
 }
 
 class _LoginScreenState extends State<LoginScreen> {
+   final LoginController loginController = Get.put(LoginController());
   final emailController = TextEditingController();
   final passwordController = TextEditingController();
   bool isPasswordVisible = false;
@@ -28,6 +32,8 @@ class _LoginScreenState extends State<LoginScreen> {
     final prefs = await SharedPreferences.getInstance();
     await prefs.setString('email', email);
     await prefs.setString('password', password);
+     await loginController.incrementLoginCount();  //زيادة مرات تسجيل الدخول
+
   }
 
   // دالة لتسجيل الدخول

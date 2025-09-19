@@ -1,70 +1,45 @@
+// modules/home/home_screen.dart
+
 import 'package:flutter/material.dart';
-import 'package:rafiqi_university/layout/custom_bottom_nav_bar.dart';
-import  'package:rafiqi_university/modules/dashboard/settings_screen.dart';
-import 'package:rafiqi_university/shared/components/components.dart';
-// import 'package:rafiqi_university/main.dart';
-import 'package:rafiqi_university/layout/mainlayoutwidget.dart';
+import 'package:get/get.dart'; // 1. استيراد GetX
+//import 'package:rafiqi_university/controllers/login_controller.dart';
+import 'package:rafiqi_university/modules/login/login_controller.dart'; // 2. استيراد الـ Controller
+
 class HomeScreen extends StatelessWidget {
-  // const HomeScreen({super.key});
-final VoidCallback toggleTheme;
-final int _currentIndex = 0;
+  final VoidCallback toggleTheme;
+  const HomeScreen({super.key, required this.toggleTheme});
 
-  // final _onItemTapped;
-// const HomeScreen({Key? key, required this.toggleTheme}) : super(key: key);
-
-const HomeScreen({super.key , required this.toggleTheme, });
-// MyApp({Key? key,required this. initialDarkMode}) :super(key: key);
   @override
-  Widget build(BuildContext context,
-  
-    ) {
-    return Center(
-      // backgroundColor: Colors.blue,
-      // appBar: AppBar(
-      //   leading: IconButton(
-      //     onPressed: (){
-      //       Navigator.pushNamed(context, '/notificationsscreen');
-      //     },
-      //      icon: CircleAvatar(
-      //       child:Icon(Icons.notification_important_outlined)),),
-      //      title: Text('رفيقي الجامعي'),
-      //      centerTitle: true,
-      //      actions: [
-            // IconButton(
-            //   onPressed:(){
-            //      Navigator.pushNamed(context, '/settingscreen');
-            //   } 
-            // , icon: Icon(Icons.settings)),
-            // IconButton(
-            //   onPressed:toggleTheme
-            // , icon: Icon(Icons.brightness_6_outlined)),
-        //     Builder(
-        // builder: (context) => IconButton(
-        //   icon: Icon(Icons.menu), // أيقونة القائمة
-        //   onPressed: () => Scaffold.of(context).openEndDrawer(), // الأمر الذي يفتح القائمة اليمنى
-        // ),
-      // ),
+  Widget build(BuildContext context) {
+    // 3. الوصول إلى نفس نسخة الـ Controller
+    final LoginController loginController = Get.find<LoginController>();
 
-          //  ],
-         
-      // ),
-      //    endDrawer: customDrawer(toggleTheme: toggleTheme,
-      //   context: context
-      // ),
-     
-      //  bottomNavigationBar: CustomBottomNavBar(
-      //   currentIndex: _currentIndex, onItemTapped: (int ) {  } ,
-      //   // onItemTapped: _onItemTapped,
-      // ),
-      // floatingActionButtonLocation: FloatingActionButtonLocation.endDocked,
-      
-     
-     child:  Column(
+    return Center(
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
         children: [
-        //  getCurrentScreen(toggleTheme:toggleTheme, context: context), 
-         Text('الصفحة الرئيسية',
-        style: TextStyle(fontSize: 40,fontWeight: FontWeight.bold),),
-     ],
+          const Text(
+            'الصفحة الرئيسية',
+            style: TextStyle(fontSize: 40, fontWeight: FontWeight.bold),
+          ),
+          const SizedBox(height: 30),
+          
+          // 4. استخدام Obx لمراقبة وعرض قيمة العداد
+          Obx(() {
+            return Card(
+              elevation: 4,
+              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+              child: Padding(
+                padding: const EdgeInsets.symmetric(vertical: 15.0, horizontal: 25.0),
+                child: Text(
+                  'إجمالي مرات تسجيل الدخول: ${loginController.loginCount.value}',
+                  style: const TextStyle(fontSize: 20, fontWeight: FontWeight.w500),
+                  textAlign: TextAlign.center,
+                ),
+              ),
+            );
+          }),
+        ],
       ),
     );
   }

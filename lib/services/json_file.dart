@@ -38,7 +38,11 @@ class StorageService {
       if (!await file.exists()) {
         return null;
       }
-
+      void checkFileLocation() async {
+  final file = await _localFile;
+  print('الملف محفوظ في: ${file.path}');
+  // output: /data/data/com.example.rafiqi_university/app_flutter/student_data.json
+}
       // قراءة محتوى الملف كنص
       final contents = await file.readAsString();
 

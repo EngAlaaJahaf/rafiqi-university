@@ -389,3 +389,7 @@ return  AnimatedNotchBottomBar(
   }, kIconSize: 15.0, kBottomRadius: 15.0,
 );
 }
+
+
+//==================-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=>
+
