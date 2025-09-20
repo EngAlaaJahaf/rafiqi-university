@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:rafiqi_university/modules/student_control/view_subjects_screen.dart';
+import 'package:rafiqi_university/modules/admin/view_subjects_screen.dart';
 
 class AppDrawer extends StatelessWidget {
   final int currentIndex; // ✨ 1. استقبل الـ index الحالي

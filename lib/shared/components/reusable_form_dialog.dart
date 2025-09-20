@@ -1,15 +1,24 @@
 import 'package:flutter/material.dart';
 
-// 1. تعريف نوع الحقل (لتحديد نوع المدخل)
-enum FormFieldType { text, number, date, time }
+// 1. تعريف أنواع الحقول المتاحة
+enum FormFieldType { text, number, date, time, dropdown }
 
-// 2. كلاس لتمثيل كل حقل في النموذج
+// 2. كلاس لتمثيل كل عنصر في القائمة المنسدلة
+class DropdownOption {
+  final String label; // النص الذي يراه المستخدم (مثل "هندسة البرمجيات")
+  final dynamic value;  // القيمة التي يتم تخزينها (مثل ID المادة)
+
+  DropdownOption({required this.label, required this.value});
+}
+
+// 3. كلاس إعدادات الحقل (مع دعم القوائم المنسدلة)
 class FormFieldConfig {
-  final String name; // مفتاح فريد للحقل (مثل 'subject_name')
-  final String label; // النص الذي يظهر للمستخدم (مثل 'اسم المادة')
+  final String name;
+  final String label;
   final FormFieldType type;
   final String? initialValue;
-  final String? Function(String?)? validator; // دالة التحقق من الصحة
+  final String? Function(String?)? validator;
+  final List<DropdownOption>? dropdownOptions; // قائمة الخيارات للقوائم المنسدلة
 
   FormFieldConfig({
     required this.name,
@@ -17,14 +26,16 @@ class FormFieldConfig {
     this.type = FormFieldType.text,
     this.initialValue,
     this.validator,
+    this.dropdownOptions, // تأكد من أن هذا النوع مدعوم
   });
 }
 
-// 3. الـ Widget الرئيسي القابل لإعادة الاستخدام
+// 4. الـ Widget الرئيسي (مع منطق بناء القوائم المنسدلة)
 class ReusableFormDialog extends StatefulWidget {
-  final String title; // عنوان النافذة (مثل 'إضافة مادة' أو 'تعديل تكليف')
-  final List<FormFieldConfig> fields; // قائمة الحقول التي ستظهر في النموذج
-  final Future<void> Function(Map<String, String> data) onSave; // دالة الحفظ
+  // ... (باقي الكود كما هو)
+  final String title;
+  final List<FormFieldConfig> fields;
+  final Future<void> Function(Map<String, dynamic> data) onSave; // تم تغيير النوع ليدعم أنواع مختلفة
 
   const ReusableFormDialog({
     super.key,
@@ -39,39 +50,90 @@ class ReusableFormDialog extends StatefulWidget {
 
 class _ReusableFormDialogState extends State<ReusableFormDialog> {
   final _formKey = GlobalKey<FormState>();
-  // Map لتخزين وحدات التحكم (controllers) لكل حقل
-  late Map<String, TextEditingController> _controllers;
+  // Map لتخزين القيم المحددة (وليس فقط controllers)
+  late Map<String, dynamic> _formValues;
 
   @override
   void initState() {
     super.initState();
-    // إنشاء controller لكل حقل وتعيين القيمة الأولية
-    _controllers = {
+    _formValues = {
       for (var field in widget.fields)
-        field.name: TextEditingController(text: field.initialValue)
+        field.name: field.initialValue
     };
   }
 
-  @override
-  void dispose() {
-    // التخلص من جميع الـ controllers لتجنب تسريب الذاكرة
-    _controllers.values.forEach((controller) => controller.dispose());
-    super.dispose();
-  }
+  // ... (dispose غير مطلوب الآن لأننا لا نستخدم controllers لكل شيء)
 
   Future<void> _handleSave() async {
-    // التحقق من صحة جميع الحقول
     if (_formKey.currentState!.validate()) {
-      // إنشاء Map تحتوي على البيانات المدخلة
-      final data = _controllers.map((key, controller) => MapEntry(key, controller.text));
-      
-      // استدعاء دالة الحفظ التي تم تمريرها من الخارج
-      await widget.onSave(data);
+      _formKey.currentState!.save(); // حفظ قيم النموذج
+      await widget.onSave(_formValues);
+      if (mounted) Navigator.of(context).pop(true);
+    }
+  }
 
-      // إغلاق النافذة بعد الحفظ بنجاح
-      if (mounted) {
-        Navigator.of(context).pop(true);
-      }
+  // دالة لبناء الحقل بناءً على نوعه
+  Widget _buildFormField(FormFieldConfig field) {
+    switch (field.type) {
+      case FormFieldType.dropdown:
+        return DropdownButtonFormField<dynamic>(
+          value: _formValues[field.name],
+          decoration: InputDecoration(labelText: field.label, border: const OutlineInputBorder()),
+          items: field.dropdownOptions?.map((option) {
+            return DropdownMenuItem<dynamic>(
+              value: option.value,
+              child: Text(option.label),
+            );
+          }).toList(),
+          onChanged: (value) {
+            setState(() {
+              _formValues[field.name] = value;
+            });
+          },
+          validator: (value) => field.validator?.call(value?.toString()),
+          onSaved: (value) => _formValues[field.name] = value,
+        );
+        case FormFieldType.date:
+      // نستخدم controller هنا لتحديث النص في الحقل بسهولة
+      final controller = TextEditingController(text: _formValues[field.name] as String?);
+      return TextFormField(
+        controller: controller,
+        readOnly: true, // نجعل الحقل للقراءة فقط لمنع الكتابة اليدوية
+        decoration: InputDecoration(
+          labelText: field.label,
+          border: const OutlineInputBorder(),
+          suffixIcon: const Icon(Icons.calendar_today), // أيقونة التقويم
+        ),
+        validator: (value) => field.validator?.call(value),
+        onTap: () async {
+          // عند الضغط على الحقل، نفتح منتقي التاريخ
+          DateTime? pickedDate = await showDatePicker(
+            context: context,
+            initialDate: DateTime.now(),
+            firstDate: DateTime(2000),
+            lastDate: DateTime(2101),
+          );
+          if (pickedDate != null) {
+            // تنسيق التاريخ بالشكل الذي نريده (YYYY-MM-DD)
+            String formattedDate = "${pickedDate.year}-${pickedDate.month.toString().padLeft(2, '0')}-${pickedDate.day.toString().padLeft(2, '0')}";
+            setState(() {
+              // تحديث النص في الحقل
+              controller.text = formattedDate;
+              // حفظ القيمة في الـ Map
+              _formValues[field.name] = formattedDate;
+            });
+          }
+        },
+        onSaved: (value) => _formValues[field.name] = value,
+      );
+      // يمكنك إضافة case لـ date و time هنا
+      default: // الحالة الافتراضية هي حقل نصي
+        return TextFormField(
+          initialValue: field.initialValue,
+          decoration: InputDecoration(labelText: field.label, border: const OutlineInputBorder()),
+          validator: field.validator,
+          onSaved: (value) => _formValues[field.name] = value,
+        );
     }
   }
 
@@ -85,33 +147,17 @@ class _ReusableFormDialogState extends State<ReusableFormDialog> {
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: widget.fields.map((field) {
-              // بناء TextFormField لكل حقل بناءً على الإعدادات
               return Padding(
                 padding: const EdgeInsets.only(bottom: 12.0),
-                child: TextFormField(
-                  controller: _controllers[field.name],
-                  decoration: InputDecoration(
-                    labelText: field.label,
-                    border: const OutlineInputBorder(),
-                  ),
-                  validator: field.validator,
-                  // يمكنك إضافة المزيد من الخصائص هنا بناءً على field.type
-                  // keyboardType, onTap for date pickers, etc.
-                ),
+                child: _buildFormField(field),
               );
             }).toList(),
           ),
         ),
       ),
       actions: [
-        TextButton(
-          onPressed: () => Navigator.of(context).pop(false),
-          child: const Text('إلغاء'),
-        ),
-        ElevatedButton(
-          onPressed: _handleSave,
-          child: const Text('حفظ'),
-        ),
+        TextButton(onPressed: () => Navigator.of(context).pop(false), child: const Text('إلغاء')),
+        ElevatedButton(onPressed: _handleSave, child: const Text('حفظ')),
       ],
     );
   }

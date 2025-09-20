@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:rafiqi_university/model/repository/subjects_repository.dart';
 import 'package:rafiqi_university/model/subject.dart';
-import 'package:rafiqi_university/modules/student_control/add_subject.dart';
-import 'package:rafiqi_university/services/database_helper.dart';
+import 'package:rafiqi_university/modules/room_classes/lectures_screen.dart';
+// import 'package:rafiqi_university/services/database_service.dart';
 
 class ViewSubjectsScreen extends StatefulWidget {
   const ViewSubjectsScreen({super.key, required VoidCallback toggleTheme});
@@ -21,15 +22,12 @@ class _ViewSubjectsScreenState extends State<ViewSubjectsScreen> {
 
   void _refreshSubjects() {
     setState(() {
-      _subjects = DatabaseHelper.instance.getAllSubjects();
+      _subjects = SubjectsRepository.instance.getAll();
     });
   }
 
   void showAddSubjectDialog({Subject? subject}) async {
-    final result = await showDialog<bool>(
-      context: context,
-      builder: (context) => AddSubjectDialog(subject: subject),
-    );
+    final result = await showSubjectDialog(context, subject: subject);
 
     if (result == true) {
       _refreshSubjects();
@@ -60,12 +58,12 @@ class _ViewSubjectsScreenState extends State<ViewSubjectsScreen> {
               return Card(
                 margin: const EdgeInsets.symmetric(vertical: 8),
                 child: ListTile(
-                  title: Text(subject.subject_name, style: const TextStyle(fontWeight: FontWeight.bold)),
-                  subtitle: Text('الرمز: ${subject.subject_code ?? 'N/A'}\nالمدرس: ${subject.instructor_name ?? 'N/A'}'),
+                  title: Text(subject.name, style: const TextStyle(fontWeight: FontWeight.bold)),
+                  subtitle: Text('الرمز: ${subject.code ?? 'N/A'}\nعدد الساعات: ${subject.creditHours ?? 'N/A'}'),
                   trailing: IconButton(
                     icon: const Icon(Icons.delete, color: Colors.red),
                     onPressed: () async {
-                      await DatabaseHelper.instance.deleteSubject(subject.id!);
+                      await SubjectsRepository.instance.delete(subject.id!);
                       _refreshSubjects();
                     },
                   ),
