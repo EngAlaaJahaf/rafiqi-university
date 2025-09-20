@@ -1,14 +1,18 @@
 import 'package:flutter/material.dart';
+import 'package:rafiqi_university/modules/admin/add_lecture_type_page.dart';
 import 'package:rafiqi_university/modules/admin/view_subjects_screen.dart';
 
 class AppDrawer extends StatelessWidget {
+  final int bottomNavIndex; // تم تغيير الاسم لزيادة الوضوح
+  final Function(int) onMainNavigate;
+  final Function(Widget, String) onSecondaryNavigate;
   final int currentIndex; // ✨ 1. استقبل الـ index الحالي
   final Function(int) onItemTapped;
  final VoidCallback toggleTheme;
   const AppDrawer({
     super.key,
     required this.currentIndex, // ✨ 2. اجعله مطلوباً
-    required this.onItemTapped, required this.toggleTheme,
+    required this.onItemTapped, required this.toggleTheme, required this.bottomNavIndex, required this.onMainNavigate, required this.onSecondaryNavigate,
   });
 
   @override
@@ -60,7 +64,7 @@ class AppDrawer extends StatelessWidget {
             selectedTileColor: Theme.of(context).primaryColor.withOpacity(0.1),
             onTap: () {
               Navigator.pop(context);
-              onItemTapped(0);
+              onMainNavigate(0);
             },
           ),
           ListTile(
@@ -70,7 +74,7 @@ class AppDrawer extends StatelessWidget {
             selectedTileColor: Theme.of(context).primaryColor.withOpacity(0.1),
             onTap: () {
               Navigator.pop(context);
-              onItemTapped(1);
+              onMainNavigate(1);
             },
           ),
           ListTile(
@@ -80,7 +84,7 @@ class AppDrawer extends StatelessWidget {
             selectedTileColor: Theme.of(context).primaryColor.withOpacity(0.1),
             onTap: () {
               Navigator.pop(context);
-              onItemTapped(2);
+              onMainNavigate(2);
             },
           ),
           
@@ -110,6 +114,18 @@ class AppDrawer extends StatelessWidget {
         //     },
         //   ),
 //-=-=-=-=-=-=
+ListTile(
+            leading: const Icon(Icons.door_back_door_rounded),
+            title: const Text('إضافة البيانات الأساسية'),
+           
+            onTap: () {
+      Navigator.pop(context);
+      onSecondaryNavigate(
+        ViewSubjectsScreen(toggleTheme: toggleTheme),
+        'المواد الدراسية', // مرر العنوان
+      );
+    },
+          ),
           ListTile(
             leading: const Icon(Icons.settings_outlined),
             title: const Text('الإعدادات'),
@@ -117,7 +133,7 @@ class AppDrawer extends StatelessWidget {
             selectedTileColor: Theme.of(context).primaryColor.withOpacity(0.1),
             onTap: () {
               Navigator.pop(context);
-              onItemTapped(3);
+              onMainNavigate(3);
             },
           ),
           // ... (بقية العناصر مثل تسجيل الخروج)

@@ -6,7 +6,7 @@ import 'package:rafiqi_university/model/repository/subjects_repository.dart';
 import 'package:rafiqi_university/shared/components/reusable_form_dialog.dart';
 
 class AddLecturePage extends StatefulWidget {
-  const AddLecturePage({super.key});
+  const AddLecturePage({super.key, required VoidCallback toggleTheme});
 
   @override
   State<AddLecturePage> createState() => _AddLecturePageState();
@@ -26,7 +26,7 @@ class _AddLecturePageState extends State<AddLecturePage> {
     // تحميل البيانات عند بدء تشغيل الصفحة
     _lecturesFuture = LecturesRepository.instance.getAll(); // نفترض وجود دالة getAll في الـ repo
     // _subjectsFuture = _subjectsRepo.getAll();
-    
+    _subjectsFuture = SubjectsRepository.instance.getAll();
   }
 
   // دالة لفتح نافذة إضافة محاضرة جديدة
@@ -48,7 +48,7 @@ class _AddLecturePageState extends State<AddLecturePage> {
         label: 'تاريخ المحاضرة',
         // ملاحظة: هنا يجب استخدام منتقي تاريخ حقيقي، لكن للتبسيط سنستخدم حقل نصي
         // يمكنك لاحقًا تطوير ReusableFormDialog لدعم DatePicker
-        type: FormFieldType.text, 
+        type: FormFieldType.DatePicker, 
         validator: (value) => (value == null || value.isEmpty) ? 'الرجاء إدخال التاريخ' : null,
       ),
       FormFieldConfig(

@@ -75,6 +75,7 @@ class _ViewSubjectsScreenState extends State<ViewSubjectsScreen> {
         },
       ),
       floatingActionButton: FloatingActionButton(
+        shape: const CircleBorder(),
         onPressed: () => showAddSubjectDialog(),
         child: const Icon(Icons.add),
       ),

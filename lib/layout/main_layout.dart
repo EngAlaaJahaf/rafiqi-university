@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 // 1. استورد فقط الـ Widgets التي تحتاجها (القوائم والشاشات)
 import 'package:rafiqi_university/layout/app_drawer.dart';
 import 'package:rafiqi_university/layout/custom_bottom_nav_bar.dart';
+import 'package:rafiqi_university/modules/admin/add_lecture_page.dart';
 
 // استورد الشاشات التي سيتم عرضها
 import 'package:rafiqi_university/modules/home/home_screen.dart';
@@ -16,8 +17,6 @@ import 'package:rafiqi_university/modules/admin/view_subjects_screen.dart';
 // 2. تم تصحيح اسم الكلاس
 class MainLayoutWidget extends StatefulWidget {
   final VoidCallback toggleTheme;
-
-  // 3. تم تصحيح المُنشئ (constructor)
   const MainLayoutWidget({super.key, required this.toggleTheme});
 
   @override
@@ -25,37 +24,51 @@ class MainLayoutWidget extends StatefulWidget {
 }
 
 class _MainLayoutWidgetState extends State<MainLayoutWidget> {
-  int _currentIndex = 0;
-  late final List<Widget> _screens;
-late final List<String> _titles;
+  // ✨ هذا هو مصدر الحقيقة الوحيد للشاشة المعروضة
+  Widget _currentScreen; 
+  String _currentTitle = 'الرئيسية';
+  
+  // ✨ هذا المتغير يتتبع فقط العنصر النشط في القائمة السفلية
+  int _bottomNavIndex = 0; 
+
+  late final List<Widget> _mainScreens;
+  late final List<String> _mainTitles;
+
+  // تهيئة أولية
+  _MainLayoutWidgetState() : _currentScreen = Container();
+
   @override
   void initState() {
     super.initState();
     
-    // 4. تم تصحيح قائمة الشاشات
-    // الصفحات الداخلية لا تحتاج إلى context أو currentIndex
-    _screens = [
+    _mainScreens = [
       HomeScreen(toggleTheme: widget.toggleTheme),
       NotificationsScreen(toggleTheme: widget.toggleTheme),
-      ViewSubjectsScreen(toggleTheme: widget.toggleTheme),
+      ProfileScreen(toggleTheme: widget.toggleTheme),
       SettingsScreen(toggleTheme: widget.toggleTheme),
-      
     ];
-    _titles = [
-     'الرئيسية',
-     'الإشعارات',
-     'المواد الدراسية',
-     'الإعدادات',
-    ];
+    _mainTitles = ['الرئيسية', 'الإشعارات', 'الملف الشخصي', 'الإعدادات'];
+
+    // ابدأ بالشاشة الرئيسية
+    _currentScreen = _mainScreens[0]; 
   }
 
-  // 5. تم إرجاع الدالة المسؤولة عن تحديث الحالة
-  void _onItemTapped(int index) {
-    // لا تقم بإعادة بناء الواجهة إذا كانت الصفحة هي نفسها
-    if (_currentIndex == index) return;
-    
+  // دالة يتم استدعاؤها من القائمة السفلية والجانبية (للعناصر الرئيسية)
+  void _navigateToMainScreen(int index) {
     setState(() {
-      _currentIndex = index;
+      _bottomNavIndex = index;
+      _currentScreen = _mainScreens[index];
+      _currentTitle = _mainTitles[index];
+    });
+  }
+
+  // دالة يتم استدعاؤها من القائمة الجانبية (للعناصر الثانوية)
+  void _navigateToSecondaryScreen(Widget screen, String title) {
+    setState(() {
+      // ✨ أهم سطر: قم بتعيين -1 ليعرف شريط التنقل السفلي أنه لا يوجد عنصر نشط
+      _bottomNavIndex = -1; 
+      _currentScreen = screen;
+      _currentTitle = title;
     });
   }
 
@@ -65,32 +78,32 @@ late final List<String> _titles;
 
     return Scaffold(
       appBar: AppBar(
-        title:  Text(_titles[_currentIndex]) ,
+        title: Text(_currentTitle),
         centerTitle: true,
       ),
       
       endDrawer: AppDrawer(
-        currentIndex: _currentIndex,
-        onItemTapped: _onItemTapped, toggleTheme: widget.toggleTheme,
+        // مرر الـ index الخاص بالقائمة السفلية
+        bottomNavIndex: _bottomNavIndex, 
+        onMainNavigate: _navigateToMainScreen,
+        onSecondaryNavigate: _navigateToSecondaryScreen,
+        toggleTheme: widget.toggleTheme, currentIndex: _bottomNavIndex, onItemTapped: (_currentScreen ) {  },
       ),
       
-      body: _screens[_currentIndex], 
+      // ✨ دائمًا يعرض الشاشة الحالية
+      body: _currentScreen, 
       
       floatingActionButton: FloatingActionButton(
+        child: Icon(Icons.add),
         shape: const CircleBorder(),
-        onPressed: () {
-          // يمكنك إضافة وظيفة هنا
-        },
-        backgroundColor: theme.colorScheme.primary,
-        foregroundColor: theme.colorScheme.onPrimary,
-        child: const Icon(Icons.add),
+        onPressed: () { print('object'); },/* ... */
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
       
-      // 6. تم تصحيح طريقة استدعاء شريط التنقل السفلي
       bottomNavigationBar: CustomBottomNavBar(
-        currentIndex: _currentIndex,
-        onItemTapped: _onItemTapped,
+        // مرر الـ index الخاص بالقائمة السفلية
+        currentIndex: _bottomNavIndex, 
+        onItemTapped: _navigateToMainScreen,
       ),
     );
   }

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 // 1. تعريف أنواع الحقول المتاحة
-enum FormFieldType { text, number, date, time, dropdown }
+enum FormFieldType { text, number, date, time, dropdown, DatePicker }
 
 // 2. كلاس لتمثيل كل عنصر في القائمة المنسدلة
 class DropdownOption {
