@@ -1,9 +1,9 @@
 // lib/repositories/assignments_repository.dart
 import 'package:rafiqi_university/model/assignment.dart';
-import 'package:rafiqi_university/services/Database_helper.dart';
+import 'package:rafiqi_university/services/Database_service.dart';
 
 class AssignmentsRepository {
-  final DatabaseHelper _dbService = DatabaseHelper.instance;
+  final DatabaseService _dbService = DatabaseService.instance;
 
   Future<int> create(Assignment assignment) async {
     final db = await _dbService.database;

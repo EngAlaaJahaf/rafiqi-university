@@ -1,17 +1,29 @@
-// modules/home/home_screen.dart
-
 import 'package:flutter/material.dart';
-import 'package:get/get.dart'; // 1. استيراد GetX
-//import 'package:rafiqi_university/controllers/login_controller.dart';
-import 'package:rafiqi_university/modules/login/login_controller.dart'; // 2. استيراد الـ Controller
+import 'package:get/get.dart';
+import 'package:provider/provider.dart'; // 1. استيراد Provider
+import 'package:rafiqi_university/layout/fab_view_model.dart'; // 2. استيراد الـ ViewModel
+import 'package:rafiqi_university/modules/login/login_controller.dart';
 
-class HomeScreen extends StatelessWidget {
+class HomeScreen extends StatefulWidget {
   final VoidCallback toggleTheme;
   const HomeScreen({super.key, required this.toggleTheme});
 
   @override
+  State<HomeScreen> createState() => _HomeScreenState();
+}
+
+class _HomeScreenState extends State<HomeScreen> {
+  @override
+  void initState() {
+    super.initState();
+    // 3. أخبر الـ ViewModel أنه لا يوجد زر عائم لهذه الشاشة
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      Provider.of<FabViewModel>(context, listen: false).setFabAction(null);
+    });
+  }
+
+  @override
   Widget build(BuildContext context) {
-    // 3. الوصول إلى نفس نسخة الـ Controller
     final LoginController loginController = Get.find<LoginController>();
 
     return Center(
@@ -23,8 +35,6 @@ class HomeScreen extends StatelessWidget {
             style: TextStyle(fontSize: 40, fontWeight: FontWeight.bold),
           ),
           const SizedBox(height: 30),
-          
-          // 4. استخدام Obx لمراقبة وعرض قيمة العداد
           Obx(() {
             return Card(
               elevation: 4,

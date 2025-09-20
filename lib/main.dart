@@ -1,7 +1,9 @@
 // main.dart
 
 import 'package:flutter/material.dart';
-import 'package:get/get.dart'; // 1. استيراد GetX
+import 'package:get/get.dart';
+import 'package:provider/provider.dart';
+import 'package:rafiqi_university/layout/fab_view_model.dart';
 import 'package:rafiqi_university/modules/login/login_screen.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -22,6 +24,7 @@ class MyApp extends StatefulWidget {
 
 class _MyAppState extends State<MyApp> {
   late bool isDarkMode;
+
   @override
   void initState() {
     super.initState();
@@ -38,28 +41,56 @@ class _MyAppState extends State<MyApp> {
 
   @override
   Widget build(BuildContext context) {
-    // 2. استخدم GetMaterialApp للسماح لـ GetX بالعمل
-    return GetMaterialApp(    //تفعيل GetX: استبدال MaterialApp بـ GetMaterialApp للسماح لـ GetX بإدارة الإشعارات (Snackbars) والتنقل.
-      debugShowCheckedModeBanner: false,
-      title: 'رفيقي الجامعي',
-      theme: ThemeData.light().copyWith(
-        primaryColor: const Color.fromARGB(255, 33, 152, 243),
-        appBarTheme: AppBarTheme(
-          backgroundColor: const Color.fromARGB(255, 3, 140, 244),
-          iconTheme: IconThemeData(
-            color: const Color.fromARGB(255, 240, 231, 231),
-          ),
-          titleTextStyle: TextStyle(
-            color: Colors.white,
-            fontSize: 24.0,
-            fontWeight: FontWeight.bold,
+    // 1. قم بإنشاء نظام الألوان للوضع الفاتح
+    final lightColorScheme = ColorScheme.fromSeed(
+      seedColor: const Color.fromARGB(255, 3, 140, 244),
+      brightness: Brightness.light,
+    );
+
+    // 2. قم بإنشاء نظام الألوان للوضع المظلم
+    final darkColorScheme = ColorScheme.fromSeed(
+      seedColor: const Color.fromARGB(255, 3, 140, 244),
+      brightness: Brightness.dark,
+    );
+
+    return ChangeNotifierProvider(
+      create: (context) => FabViewModel(),
+      child: GetMaterialApp(
+        debugShowCheckedModeBanner: false,
+        title: 'رفيقي الجامعي',
+
+        // --- الحل النهائي للـ Theme الفاتح ---
+        theme: ThemeData(
+          useMaterial3: true,
+          colorScheme: lightColorScheme, // استخدم نظام الألوان مباشرة
+          appBarTheme: AppBarTheme(
+            // لا تحدد backgroundColor هنا، سيأخذها من colorScheme تلقائيًا
+            iconTheme: const IconThemeData(color: Colors.white),
+            titleTextStyle: const TextStyle(
+              color: Colors.white,
+              fontSize: 24.0,
+              fontWeight: FontWeight.bold,
+            ),
           ),
         ),
-        colorScheme: ColorScheme.fromSeed(seedColor: const Color.fromARGB(255, 141, 235, 237)),
+
+        // --- الحل النهائي للـ Theme المظلم ---
+        darkTheme: ThemeData(
+          useMaterial3: true,
+          colorScheme: darkColorScheme, // استخدم نظام الألوان مباشرة
+          appBarTheme: AppBarTheme(
+            iconTheme: const IconThemeData(color: Colors.white),
+            titleTextStyle: const TextStyle(
+              color: Colors.white,
+              fontSize: 24.0,
+              fontWeight: FontWeight.bold,
+            ),
+          ),
+        ),
+
+        themeMode: isDarkMode ? ThemeMode.dark : ThemeMode.light,
+        home: LoginScreen(toggleTheme: toggleTheme),
       ),
-      darkTheme: ThemeData.dark(),
-      themeMode: isDarkMode ? ThemeMode.dark : ThemeMode.light,
-      home: LoginScreen(toggleTheme: toggleTheme),
     );
   }
 }

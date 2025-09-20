@@ -1,11 +1,15 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart'; // 1. استيراد Provider
+import 'package:rafiqi_university/layout/fab_view_model.dart'; // 2. استيراد الـ ViewModel
 import 'package:rafiqi_university/model/repository/subjects_repository.dart';
 import 'package:rafiqi_university/model/subject.dart';
 import 'package:rafiqi_university/modules/room_classes/lectures_screen.dart';
-// import 'package:rafiqi_university/services/database_service.dart';
+// تأكد من وجود دالة showSubjectDialog في مكان ما يمكن الوصول إليه
+// import 'package:rafiqi_university/shared/dialogs/subject_dialog.dart';
 
 class ViewSubjectsScreen extends StatefulWidget {
-  const ViewSubjectsScreen({super.key, required VoidCallback toggleTheme});
+  final VoidCallback toggleTheme;
+  const ViewSubjectsScreen({super.key, required this.toggleTheme});
 
   @override
   State<ViewSubjectsScreen> createState() => _ViewSubjectsScreenState();
@@ -18,6 +22,24 @@ class _ViewSubjectsScreenState extends State<ViewSubjectsScreen> {
   void initState() {
     super.initState();
     _refreshSubjects();
+
+    // 3. استخدم addPostFrameCallback لضمان أن الـ build قد اكتمل
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      // 4. اقرأ الـ ViewModel وقم بتعيين وظيفة الزر العائم الخاصة بهذه الشاشة
+      Provider.of<FabViewModel>(context, listen: false).setFabAction(_openAddDialog);
+    });
+  }
+
+  @override
+  void dispose() {
+    // 5. (مهم جدًا) قم بإزالة وظيفة الزر عند مغادرة الشاشة
+    // هذا يضمن عدم ظهور الزر في الشاشة التالية عن طريق الخطأ
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (mounted) {
+        Provider.of<FabViewModel>(context, listen: false).setFabAction(null);
+      }
+    });
+    super.dispose();
   }
 
   void _refreshSubjects() {
@@ -26,59 +48,54 @@ class _ViewSubjectsScreenState extends State<ViewSubjectsScreen> {
     });
   }
 
-  void showAddSubjectDialog({Subject? subject}) async {
+  // هذه هي الوظيفة التي سيتم استدعاؤها بواسطة الزر العائم
+  void _openAddDialog({Subject? subject}) async {
+    // افترض أن showSubjectDialog هي دالة عامة الآن
     final result = await showSubjectDialog(context, subject: subject);
-
     if (result == true) {
       _refreshSubjects();
     }
+    print('تم الضغط على الزر العائم في شاشة المواد!');
   }
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-    
-      body: FutureBuilder<List<Subject>>(
-        future: _subjects,
-        builder: (context, snapshot) {
-          if (snapshot.connectionState == ConnectionState.waiting) {
-            return const Center(child: CircularProgressIndicator());
-          } else if (snapshot.hasError) {
-            return Center(child: Text('حدث خطأ: ${snapshot.error}'));
-          } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
-            return const Center(child: Text('لا توجد مواد مسجلة.'));
-          }
+    // 6. لا يوجد Scaffold هنا، فقط محتوى الشاشة
+    return FutureBuilder<List<Subject>>(
+      future: _subjects,
+      builder: (context, snapshot) {
+        if (snapshot.connectionState == ConnectionState.waiting) {
+          return const Center(child: CircularProgressIndicator());
+        } else if (snapshot.hasError) {
+          return Center(child: Text('حدث خطأ: ${snapshot.error}'));
+        } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
+          return const Center(child: Text('لا توجد مواد مسجلة.'));
+        }
 
-          final subjects = snapshot.data!;
-          return ListView.builder(
-            padding: const EdgeInsets.all(8),
-            itemCount: subjects.length,
-            itemBuilder: (context, index) {
-              final subject = subjects[index];
-              return Card(
-                margin: const EdgeInsets.symmetric(vertical: 8),
-                child: ListTile(
-                  title: Text(subject.name, style: const TextStyle(fontWeight: FontWeight.bold)),
-                  subtitle: Text('الرمز: ${subject.code ?? 'N/A'}\nعدد الساعات: ${subject.creditHours ?? 'N/A'}'),
-                  trailing: IconButton(
-                    icon: const Icon(Icons.delete, color: Colors.red),
-                    onPressed: () async {
-                      await SubjectsRepository.instance.delete(subject.id!);
-                      _refreshSubjects();
-                    },
-                  ),
-                  onTap: () => showAddSubjectDialog(subject: subject),
+        final subjects = snapshot.data!;
+        return ListView.builder(
+          padding: const EdgeInsets.all(8),
+          itemCount: subjects.length,
+          itemBuilder: (context, index) {
+            final subject = subjects[index];
+            return Card(
+              margin: const EdgeInsets.symmetric(vertical: 8),
+              child: ListTile(
+                title: Text(subject.name, style: const TextStyle(fontWeight: FontWeight.bold)),
+                subtitle: Text('الرمز: ${subject.code ?? 'N/A'}\nعدد الساعات: ${subject.creditHours ?? 'N/A'}'),
+                trailing: IconButton(
+                  icon: const Icon(Icons.delete, color: Colors.red),
+                  onPressed: () async {
+                    await SubjectsRepository.instance.delete(subject.id!);
+                    _refreshSubjects();
+                  },
                 ),
-              );
-            },
-          );
-        },
-      ),
-      floatingActionButton: FloatingActionButton(
-        shape: const CircleBorder(),
-        onPressed: () => showAddSubjectDialog(),
-        child: const Icon(Icons.add),
-      ),
+                onTap: () => _openAddDialog(subject: subject),
+              ),
+            );
+          },
+        );
+      },
     );
   }
 }

@@ -3,64 +3,51 @@ import 'package:rafiqi_university/modules/admin/add_lecture_type_page.dart';
 import 'package:rafiqi_university/modules/admin/view_subjects_screen.dart';
 
 class AppDrawer extends StatelessWidget {
-  final int bottomNavIndex; // تم تغيير الاسم لزيادة الوضوح
+  final int bottomNavIndex;
   final Function(int) onMainNavigate;
   final Function(Widget, String) onSecondaryNavigate;
-  final int currentIndex; // ✨ 1. استقبل الـ index الحالي
-  final Function(int) onItemTapped;
- final VoidCallback toggleTheme;
+  final VoidCallback toggleTheme;
+
+  // 1. تم تبسيط المُنشئ
   const AppDrawer({
     super.key,
-    required this.currentIndex, // ✨ 2. اجعله مطلوباً
-    required this.onItemTapped, required this.toggleTheme, required this.bottomNavIndex, required this.onMainNavigate, required this.onSecondaryNavigate,
+    required this.bottomNavIndex,
+    required this.onMainNavigate,
+    required this.onSecondaryNavigate,
+    required this.toggleTheme,
   });
 
   @override
-  Widget build(BuildContext context,  ) {
+  Widget build(BuildContext context) {
     return Drawer(
       child: ListView(
         padding: EdgeInsets.zero,
         children: [
-         UserAccountsDrawerHeader(
-          // صورة المستخدم الحالية
-          currentAccountPicture: CircleAvatar(
-            backgroundImage: NetworkImage('https://picsum.photos/200' ),
-          ),
-          // اسم المستخدم
-          accountName: Text(
-            'اسم المستخدم',
-            style: TextStyle(fontWeight: FontWeight.bold,color: const Color.fromARGB(255, 13, 121, 121)),
+          UserAccountsDrawerHeader(
+            currentAccountPicture: const CircleAvatar(
+              backgroundImage: NetworkImage('https://picsum.photos/200' ),
+            ),
+            accountName: const Text(
+              'اسم المستخدم',
+              style: TextStyle(fontWeight: FontWeight.bold, color: Color.fromARGB(255, 13, 121, 121)),
+            ),
+            accountEmail: const Text(
+              'user.email@example.com',
+              style: TextStyle(fontWeight: FontWeight.bold, color: Color.fromARGB(255, 13, 121, 121)),
+            ),
+            otherAccountsPictures: [
+              IconButton(
+                  onPressed: toggleTheme,
+                  icon: const CircleAvatar(child: Icon(Icons.brightness_6_outlined))),
+            ],
+            decoration: const BoxDecoration(),
           ),
           
-          // البريد الإلكتروني
-          accountEmail: Text('user.email@example.com',
-          style: TextStyle(fontWeight: FontWeight.bold,color: const Color.fromARGB(255, 13, 121, 121)),),
-          // أيقونات أخرى (مثل حالة الاتصال)
-          otherAccountsPictures: [
-            
-            // Icon(
-            //   Icons.circle,
-            //   color: const Color.fromARGB(255, 22, 248, 67),
-            //   size: 14,
-            // ),
-            IconButton(
-              onPressed:toggleTheme
-            , icon: CircleAvatar(
-              child:Icon(Icons.brightness_6_outlined))),
-          ],
-          // تصميم خلفية الهيدر
-          decoration: BoxDecoration(
-            // image: DecorationImage(
-            //   image: NetworkImage('https://picsum.photos/300/200' ),
-            //   fit: BoxFit.cover,
-            // ),
-          ),
-        ),
-          // ✨ 3. استخدم خاصية `selected` لتلوين العنصر النشط
+          // --- عناصر التنقل الرئيسي ---
           ListTile(
             leading: const Icon(Icons.home_outlined),
             title: const Text('الصفحة الرئيسية'),
-            selected: currentIndex == 0, // تحقق إذا كان هذا هو العنصر النشط
+            selected: bottomNavIndex == 0,
             selectedTileColor: Theme.of(context).primaryColor.withOpacity(0.1),
             onTap: () {
               Navigator.pop(context);
@@ -70,7 +57,7 @@ class AppDrawer extends StatelessWidget {
           ListTile(
             leading: const Icon(Icons.notifications_outlined),
             title: const Text('الإشعارات'),
-            selected: currentIndex == 1,
+            selected: bottomNavIndex == 1,
             selectedTileColor: Theme.of(context).primaryColor.withOpacity(0.1),
             onTap: () {
               Navigator.pop(context);
@@ -80,63 +67,50 @@ class AppDrawer extends StatelessWidget {
           ListTile(
             leading: const Icon(Icons.person_outlined),
             title: const Text('الملف الشخصي'),
-            selected: currentIndex == 2,
+            selected: bottomNavIndex == 2,
             selectedTileColor: Theme.of(context).primaryColor.withOpacity(0.1),
             onTap: () {
               Navigator.pop(context);
               onMainNavigate(2);
             },
           ),
+          const Divider(),
+
+          // --- عناصر التنقل الثانوي ---
+          ListTile(
+            leading: const Icon(Icons.book_rounded),
+            title: const Text('إدارة المواد الدراسية'),
+            onTap: () {
+              Navigator.pop(context);
+              onSecondaryNavigate(
+                ViewSubjectsScreen(toggleTheme: toggleTheme),
+                'المواد الدراسية',
+              );
+            },
+          ),
+          ListTile(
+            leading: const Icon(Icons.category_rounded),
+            title: const Text('إدارة أنواع المحاضرات'),
+            onTap: () {
+              Navigator.pop(context);
+              onSecondaryNavigate(
+                AddLectureTypePage(toggleTheme: toggleTheme),
+                'أنواع المحاضرات',
+              );
+            },
+          ),
           
           const Divider(),
-//--------------------------------------------------
-          // ListTile(
-          //   leading: const Icon(Icons.book_outlined),
-          //   title: const Text('المواد الدراسية'),
-          //   onTap: () {
-          //     Navigator.pop(context); // أغلق القائمة
-          //     Navigator.push(
-          //       context,
-          //       MaterialPageRoute(builder: (context) => const ViewSubjectsScreen()),
-          //     );
-          //   },
-          // ),
-//=================================
-        // ListTile(
-        //     leading: const Icon(Icons.book_outlined),
-        //     title: const Text('المواد الدراسية'),
-        //     onTap: () {
-        //       Navigator.pop(context); // أغلق القائمة
-        //       Navigator.push(
-        //         context,
-        //         MaterialPageRoute(builder: (context) => const ViewSubjectsScreen(toggleTheme: () {  },)),
-        //       );
-        //     },
-        //   ),
-//-=-=-=-=-=-=
-ListTile(
-            leading: const Icon(Icons.door_back_door_rounded),
-            title: const Text('إضافة البيانات الأساسية'),
-           
-            onTap: () {
-      Navigator.pop(context);
-      onSecondaryNavigate(
-        ViewSubjectsScreen(toggleTheme: toggleTheme),
-        'المواد الدراسية', // مرر العنوان
-      );
-    },
-          ),
           ListTile(
             leading: const Icon(Icons.settings_outlined),
             title: const Text('الإعدادات'),
-            selected: currentIndex == 3,
+            selected: bottomNavIndex == 3,
             selectedTileColor: Theme.of(context).primaryColor.withOpacity(0.1),
             onTap: () {
               Navigator.pop(context);
               onMainNavigate(3);
             },
           ),
-          // ... (بقية العناصر مثل تسجيل الخروج)
         ],
       ),
     );

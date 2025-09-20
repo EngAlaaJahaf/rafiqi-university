@@ -27,6 +27,7 @@ dependencies:
   get: ^4.6.6 #حزمة GetX
   flutter_test:
     sdk: flutter
+  provider: ^6.1.5+1
 
 dev_dependencies:
   flutter_launcher_icons: ^0.13.1

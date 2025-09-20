@@ -33,7 +33,7 @@ class LectureTypeRepository {
 // R - Read: قراءة كل المحاضرات
   Future<List<LectType>> getAll() async {
     final db = await _dbService.database;
-    final result = await db.query('sem_lect_type', orderBy: 'lect_date DESC');
+    final result = await db.query('sem_lect_type');
     return result.map((json) => LectType.fromMap(json)).toList();
   }
   Future<int> update(LectType lectType) async {
