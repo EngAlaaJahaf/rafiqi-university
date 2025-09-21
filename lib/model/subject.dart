@@ -32,4 +32,12 @@ class Subject {
       creditHours: map['subj_credit_hours'] as int?,
     );
   }
+
+  factory Subject.empty() {
+  return Subject(
+    id: 0,
+    name: 'غير معروف',
+    code: '',
+  );
+}
 }

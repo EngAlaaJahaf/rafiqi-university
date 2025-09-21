@@ -4,6 +4,9 @@ import 'package:rafiqi_university/layout/app_drawer.dart';
 import 'package:rafiqi_university/layout/custom_bottom_nav_bar.dart';
 import 'package:rafiqi_university/layout/fab_view_model.dart';
 import 'package:rafiqi_university/modules/admin/admin_dashboard_screen.dart';
+// import 'package:rafiqi_university/modules/admin/view_import '
+import 'package:rafiqi_university/modules/admin/view_subjects_screen.dart';
+
 import 'package:rafiqi_university/modules/dashboard/notifications_screen.dart';
 import 'package:rafiqi_university/modules/dashboard/profile_screen.dart';
 import 'package:rafiqi_university/modules/dashboard/settings_screen.dart';
@@ -25,33 +28,35 @@ class MainLayoutWidget extends StatefulWidget {
 }
 
 class _MainLayoutWidgetState extends State<MainLayoutWidget> {
-  // ✨ 2. هذا هو المكدس الذي سيحفظ تاريخ التنقل
-  late List<ScreenState> _navigationStack;
-
+  Widget _currentScreen;
+  String _currentTitle = 'الرئيسية';
   int _bottomNavIndex = 0;
 
-  late final List<ScreenState> _mainScreens;
+  late final List<Widget> _mainScreens;
+  late final List<String> _mainTitles;
+
+  _MainLayoutWidgetState() : _currentScreen = Container();
 
   @override
   void initState() {
     super.initState();
     _mainScreens = [
-      ScreenState(screen: HomeScreen(toggleTheme: widget.toggleTheme), title: 'الرئيسية'),
-      ScreenState(screen: NotificationsScreen(toggleTheme: widget.toggleTheme), title: 'الإشعارات'),
-      ScreenState(screen: ProfileScreen(toggleTheme: widget.toggleTheme), title: 'الملف الشخصي'),
-      ScreenState(screen: SettingsScreen(toggleTheme: widget.toggleTheme), title: 'الإعدادات'),
+      HomeScreen(toggleTheme: widget.toggleTheme),
+      AdminDashboardScreen(toggleTheme: widget.toggleTheme, onSecondaryNavigate: (Widget , String ) {  },),
+      ProfileScreen(toggleTheme: widget.toggleTheme),
+      SettingsScreen(toggleTheme: widget.toggleTheme),
     ];
-    // ابدأ بالشاشة الرئيسية
-    _navigationStack = [_mainScreens[0]];
+    _mainTitles = ['الرئيسية', 'الإشعارات', 'الملف الشخصي', 'الإعدادات'];
+    _currentScreen = _mainScreens[0];
   }
 
   // دالة للانتقال إلى الشاشات الرئيسية (تمسح المكدس)
   void _navigateToMainScreen(int index) {
-    if (_bottomNavIndex == index && _navigationStack.length == 1) return;
+    if (_bottomNavIndex == index) return;
     setState(() {
       _bottomNavIndex = index;
-      // عند الانتقال إلى شاشة رئيسية، امسح المكدس وابدأ من جديد
-      _navigationStack = [_mainScreens[index]];
+      _currentScreen = _mainScreens[index];
+      _currentTitle = _mainTitles[index];
     });
   }
 
@@ -59,44 +64,36 @@ class _MainLayoutWidgetState extends State<MainLayoutWidget> {
   void _navigateToSecondaryScreen(Widget screen, String title) {
     setState(() {
       _bottomNavIndex = -1;
-      // أضف الشاشة الجديدة إلى قمة المكدس
-      _navigationStack.add(ScreenState(screen: screen, title: title));
+      _currentScreen = screen;
+      _currentTitle = title;
     });
   }
 
-  // ✨ 3. دالة الرجوع (تزيل من المكدس)
-  void _goBack() {
-    if (_navigationStack.length > 1) {
-      setState(() {
-        // قم بإزالة الشاشة الحالية من المكدس
-        _navigationStack.removeLast();
-        // (اختياري) تحقق مما إذا كانت الشاشة الجديدة هي شاشة رئيسية وقم بتحديث _bottomNavIndex
-        final lastScreenTitle = _navigationStack.last.title;
-        _bottomNavIndex = _mainScreens.indexWhere((s) => s.title == lastScreenTitle);
-      });
-    }
-  }
-
-  // دالة تأكيد الخروج من التطبيق
+  // ✨ 1. (الحل) هذه هي الدالة التي سيتم استدعاؤها عند الضغط على زر الرجوع
   Future<bool> _onWillPop() async {
-    // ✨ 4. (الحل) إذا كان هناك شيء في المكدس، قم بالرجوع بدلاً من الخروج
-    if (_navigationStack.length > 1) {
-      _goBack();
-      return false; // امنع الخروج من التطبيق
-    }
-
-    // إذا كان المكدس فارغًا (أنت في الشاشة الرئيسية)، اطلب تأكيد الخروج
+    // إظهار نافذة التأكيد
     final bool? shouldPop = await showDialog<bool>(
       context: context,
       builder: (context) => AlertDialog(
         title: const Text('تأكيد الخروج'),
         content: const Text('هل أنت متأكد من رغبتك في الخروج من التطبيق؟'),
         actions: <Widget>[
-          TextButton(onPressed: () => Navigator.of(context).pop(false), child: const Text('لا')),
-          TextButton(onPressed: () => Navigator.of(context).pop(true), child: const Text('نعم')),
+          TextButton(
+            // عند الضغط على "لا"، أغلق النافذة وأرجع false (لا تخرج)
+            onPressed: () => Navigator.of(context).pop(false),
+            child: const Text('لا'),
+          ),
+          TextButton(
+            // عند الضغط على "نعم"، أغلق النافذة وأرجع true (اخرج)
+            onPressed: () => Navigator.of(context).pop(true),
+            child: const Text('نعم'),
+          ),
         ],
       ),
     );
+
+    // إذا أغلق المستخدم النافذة بالضغط خارجها، ستكون النتيجة null
+    // لذلك، نرجع false لضمان عدم الخروج
     return shouldPop ?? false;
   }
 
@@ -105,21 +102,13 @@ class _MainLayoutWidgetState extends State<MainLayoutWidget> {
     final theme = Theme.of(context);
     final fabViewModel = Provider.of<FabViewModel>(context);
 
-    // ✨ 5. احصل على الشاشة الحالية من قمة المكدس
-    final currentScreenState = _navigationStack.last;
-
+    // ✨ 2. (الحل) لف الـ Scaffold داخل WillPopScope
     return WillPopScope(
+      // ربط الدالة بحدث onWillPop
       onWillPop: _onWillPop,
       child: Scaffold(
         appBar: AppBar(
-          // ✨ 6. (الحل) إظهار زر الرجوع إذا كان هناك شيء في المكدس
-          leading: _navigationStack.length > 1
-              ? IconButton(
-                  icon: const Icon(Icons.arrow_back),
-                  onPressed: _goBack,
-                )
-              : null, // لا تظهر الزر في الشاشات الرئيسية
-          title: Text(currentScreenState.title),
+          title: Text(_currentTitle),
           centerTitle: true,
           // لا نحتاج لـ endDrawer هنا لأن AppBar يعرض أيقونة القائمة تلقائيًا
         ),
@@ -129,7 +118,7 @@ class _MainLayoutWidgetState extends State<MainLayoutWidget> {
           onSecondaryNavigate: _navigateToSecondaryScreen,
           toggleTheme: widget.toggleTheme,
         ),
-        body: currentScreenState.screen,
+        body: _currentScreen,
         floatingActionButton: fabViewModel.fabAction != null
             ? FloatingActionButton(
                 onPressed: () => fabViewModel.fabAction!(),

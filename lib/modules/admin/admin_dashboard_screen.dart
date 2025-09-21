@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:rafiqi_university/modules/admin/add_class_room_page.dart';
 import 'package:rafiqi_university/modules/admin/add_department_page.dart';
+import 'package:rafiqi_university/modules/admin/add_enrollment_page.dart';
 import 'package:rafiqi_university/modules/admin/add_lecture_type_page.dart';
 import 'package:rafiqi_university/modules/admin/add_level_page.dart';
+import 'package:rafiqi_university/modules/admin/add_notification_page.dart';
 import 'package:rafiqi_university/modules/admin/add_semester_page.dart';
 import 'package:rafiqi_university/modules/admin/add_teacher_page.dart';
 import 'package:rafiqi_university/modules/admin/add_user_page.dart';
@@ -91,24 +93,32 @@ class AdminDashboardScreen extends StatelessWidget {
           title: 'نوع المحاضرة',
           emoji: '📶',
           onTap: () => onSecondaryNavigate(
-            AddLectureTypePage(toggleTheme: toggleTheme),
-            'إدارة المستويات',
+            AddEnrollmentPage(toggleTheme: toggleTheme),
+            'إدارة نوع المحاضرة',
           ),
         ),
         AdminDashboardCard(
           title: 'الفترات الزمنية',
-          emoji: '📶',
+          emoji: '⏰',
           onTap: () => onSecondaryNavigate(
             AddLectureTypePage(toggleTheme: toggleTheme),
-            'إدارة المستويات',
+            'إدارة الفترات الزمنية',
           ),
         ),
         AdminDashboardCard(
           title: 'تسجيل المواد ',
-          emoji: '📶',
+          emoji: '📕📗📘',
           onTap: () => onSecondaryNavigate(
             AddLectureTypePage(toggleTheme: toggleTheme),
-            'إدارة المستويات',
+            'إدارة تسجيل المواد',
+          ),
+        ),
+        AdminDashboardCard(
+          title: 'الإشعارات',
+          emoji: '🔔',
+          onTap: () => onSecondaryNavigate(
+            NotificationsPage(toggleTheme: toggleTheme),
+            'إدارة  الإشعارات',
           ),
         ),
         // ... يمكنك إضافة المزيد من البطاقات هنا

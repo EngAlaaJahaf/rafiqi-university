@@ -7,6 +7,11 @@ import 'package:rafiqi_university/layout/fab_view_model.dart';
 import 'package:rafiqi_university/modules/login/login_screen.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+// ✨ 1. تعريف الألوان الأساسية في مكان واحد لسهولة التعديل
+const Color primaryColor = Color(0xFF038CF4); // الأزرق الأساسي الذي اخترته
+const Color secondaryColor = Color(0xFF37BFE5); // لون ثانوي متناغم (أزرق سماوي)
+const Color onPrimaryColor = Colors.white; // لون النصوص والأيقونات فوق اللون الأساسي
+
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   final prefs = await SharedPreferences.getInstance();
@@ -41,16 +46,24 @@ class _MyAppState extends State<MyApp> {
 
   @override
   Widget build(BuildContext context) {
-    // 1. قم بإنشاء نظام الألوان للوضع الفاتح
+    // ✨ 2. إنشاء نظام ألوان دقيق للوضع الفاتح
     final lightColorScheme = ColorScheme.fromSeed(
-      seedColor: const Color.fromARGB(255, 3, 140, 244),
+      seedColor: primaryColor,
       brightness: Brightness.light,
+      primary: primaryColor,
+      onPrimary: onPrimaryColor,
+      secondary: secondaryColor,
+      // يمكنك تحديد ألوان أخرى هنا مثل error, surface, background
     );
 
-    // 2. قم بإنشاء نظام الألوان للوضع المظلم
+    // ✨ 3. إنشاء نظام ألوان دقيق للوضع المظلم
     final darkColorScheme = ColorScheme.fromSeed(
-      seedColor: const Color.fromARGB(255, 3, 140, 244),
+      seedColor: primaryColor,
       brightness: Brightness.dark,
+      primary: primaryColor, // غالبًا ما يكون اللون الأساسي ثابتًا
+      secondary: secondaryColor,
+      // في الوضع المظلم، قد ترغب في خلفيات أغمق
+      // background: const Color(0xFF121212),
     );
 
     return ChangeNotifierProvider(
@@ -59,30 +72,37 @@ class _MyAppState extends State<MyApp> {
         debugShowCheckedModeBanner: false,
         title: 'رفيقي الجامعي',
 
-        // --- الحل النهائي للـ Theme الفاتح ---
+        // --- Theme الوضع الفاتح المُحسّن ---
         theme: ThemeData(
           useMaterial3: true,
-          colorScheme: lightColorScheme, // استخدم نظام الألوان مباشرة
+          colorScheme: lightColorScheme,
           appBarTheme: AppBarTheme(
-            // لا تحدد backgroundColor هنا، سيأخذها من colorScheme تلقائيًا
-            iconTheme: const IconThemeData(color: Colors.white),
+            // سيأخذ لونه من colorScheme.primary تلقائيًا
+            backgroundColor: lightColorScheme.primary,
+            // الأيقونات والنصوص ستأخذ لونها من colorScheme.onPrimary
+            foregroundColor: lightColorScheme.onPrimary,
+            centerTitle: true,
             titleTextStyle: const TextStyle(
-              color: Colors.white,
-              fontSize: 24.0,
+              fontSize: 22.0, // تعديل بسيط للحجم
               fontWeight: FontWeight.bold,
             ),
           ),
+          // يمكنك تخصيص مكونات أخرى هنا
+          floatingActionButtonTheme: FloatingActionButtonThemeData(
+            backgroundColor: lightColorScheme.secondary,
+          ),
         ),
 
-        // --- الحل النهائي للـ Theme المظلم ---
+        // --- Theme الوضع المظلم المُحسّن ---
         darkTheme: ThemeData(
           useMaterial3: true,
-          colorScheme: darkColorScheme, // استخدم نظام الألوان مباشرة
+          colorScheme: darkColorScheme,
           appBarTheme: AppBarTheme(
-            iconTheme: const IconThemeData(color: Colors.white),
+            backgroundColor: darkColorScheme.surface, // في الوضع المظلم، يفضل استخدام surface للـ AppBar
+            foregroundColor: darkColorScheme.onSurface,
+            centerTitle: true,
             titleTextStyle: const TextStyle(
-              color: Colors.white,
-              fontSize: 24.0,
+              fontSize: 22.0,
               fontWeight: FontWeight.bold,
             ),
           ),
@@ -90,7 +110,6 @@ class _MyAppState extends State<MyApp> {
 
         themeMode: isDarkMode ? ThemeMode.dark : ThemeMode.light,
         home: LoginScreen(toggleTheme: toggleTheme),
-        
       ),
     );
   }

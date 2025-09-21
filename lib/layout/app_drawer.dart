@@ -7,6 +7,7 @@ import 'package:rafiqi_university/modules/admin/add_teacher_page.dart';
 import 'package:rafiqi_university/modules/admin/add_user_page.dart';
 import 'package:rafiqi_university/modules/admin/admin_dashboard_screen.dart';
 import 'package:rafiqi_university/modules/admin/view_subjects_screen.dart';
+import 'package:rafiqi_university/modules/dashboard/webview_screen.dart';
 
 class AppDrawer extends StatelessWidget {
   final int bottomNavIndex;
@@ -100,6 +101,20 @@ class AppDrawer extends StatelessWidget {
               onSecondaryNavigate(
                 ViewSubjectsScreen(toggleTheme: toggleTheme),
                 'المواد الدراسية',
+              );
+            },
+          ),
+          ListTile(
+            leading: const Icon(Icons.cloud_outlined),
+            title: const Text('النسخة السحابية'),
+            onTap: () {
+              Navigator.pop(context); // إغلاق القائمة
+              onSecondaryNavigate(
+                WebViewScreen(
+                  url: 'https://oracleapex.com/ords/r/oracledb0/mycollegebuddy/home?session=114555407062418', // ✨ ضع رابط النسخة السحابية هنا
+                  title: 'النسخة السحابية',
+                 ),
+                'النسخة السحابية',
               );
             },
           ),

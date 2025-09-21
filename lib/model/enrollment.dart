@@ -1,23 +1,23 @@
 class Enrollment {
-  String id;
-  int usertId;
-  int courseId;
+  int id; // تغيير من String إلى int لأن enrollment_id INTEGER
+  int userId;
+  int subjectId; // كان courseId أصبح subjectId لتتوافق مع subj_id
   DateTime enrollmentDate;
-  String status; // e.g., 'active', 'completed', 'dropped'
+  String status;
 
   Enrollment({
     required this.id,
-    required this.usertId,
-    required this.courseId,
+    required this.userId,
+    required this.subjectId,
     required this.enrollmentDate,
-    this.status = 'active',
+    this.status = 'ACTIVE',
   });
 
   Map<String, dynamic> toMap() {
     return {
-      'enroll_id': id,
-      'student_id': usertId,
-      'course_id': courseId,
+      'enrollment_id': id,
+      'user_id': userId,
+      'subj_id': subjectId, // تغيير من sem_id إلى subj_id
       'enroll_date': enrollmentDate.toIso8601String(),
       'status': status,
     };
@@ -25,11 +25,11 @@ class Enrollment {
 
   factory Enrollment.fromMap(Map<String, dynamic> map) {
     return Enrollment(
-      id: map['enroll_id'],
-      usertId: map['student_id'],
-      courseId: map['course_id'],
+      id: map['enrollment_id'] as int, // تغيير من enroll_id إلى enrollment_id
+      userId: map['user_id'] as int,
+      subjectId: map['subj_id'] as int, // تغيير من course_id إلى subj_id
       enrollmentDate: DateTime.parse(map['enroll_date']),
-      status: map['status'],
+      status: map['status'] ?? 'ACTIVE',
     );
   }
 }

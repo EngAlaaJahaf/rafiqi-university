@@ -46,4 +46,15 @@ class User {
       levelId: map['level_id'],
     );
   }
+
+  factory User.empty() {
+  return User(
+    id: 0,
+    username: 'غير معروف',
+    fullName: 'غير معروف',
+    email: '',
+    passwordHash: '',
+    role: '',
+  );
+}
 }
