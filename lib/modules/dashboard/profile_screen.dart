@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:rafiqi_university/shared/components/components.dart';
 // صفحة الملف الشخصي 
 class ProfileScreen extends StatelessWidget {
   final  VoidCallback toggleTheme;

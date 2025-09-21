@@ -22,4 +22,14 @@ class ClassRoomsRepository {
     final result = await db.query('sem_class', orderBy: 'cl_name ASC');
     return result.map((json) => ClassRoom.fromMap(json)).toList();
   }
+
+  Future<int> update(ClassRoom classRoom) async {
+    final db = await _dbService.database;
+    return await db.update('sem_class', classRoom.toMap(), where: 'cl_id = ?', whereArgs: [classRoom.id]);
+  }
+
+  Future<int> delete(int id) async {
+    final db = await _dbService.database;
+    return await db.delete('sem_class', where: 'cl_id = ?', whereArgs: [id]);
+  }
 }

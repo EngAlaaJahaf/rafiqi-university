@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:rafiqi_university/modules/home/home_screen.dart';
 import 'package:animated_notch_bottom_bar/animated_notch_bottom_bar/animated_notch_bottom_bar.dart';
 Widget DefaultButton({
   double width = double.infinity,
@@ -27,6 +26,34 @@ Widget DefaultButton({
       ),
     );
     //<=-=-=-=-=-=-=-=--=-=-==-=-=-=>
+
+    Widget DefaultSmallButton({
+  double width = 80.0,
+  Color background = Colors.blue,
+  bool isUpperCase = true,
+  double radius = 10.0,
+  required VoidCallback function,
+  required String text, 
+  //  required Future<void> Function() onPressed,
+  required Text child,
+}) =>
+    Container(
+      width: width,
+      height: 50.0,
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(radius),
+        color: background,
+      ),
+      child: MaterialButton(
+        onPressed: function,
+        child: Text(
+          isUpperCase ? text.toUpperCase() : text,
+          style: const TextStyle(
+            color: Colors.white,
+          ),
+        ),
+      ),
+    );
 //العناوين الرئيسية
     Widget HeaderText({required String text})=>
      Container(

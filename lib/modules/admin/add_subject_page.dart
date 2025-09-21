@@ -38,18 +38,18 @@ final SubjectsRepository _subjectsRepo = SubjectsRepository.instance; // صحي�
         label: 'المادة',
         type: FormFieldType.dropdown,
         dropdownOptions: subjectOptions,
-        validator: (value) => (value == null) ? 'الرجاء اختيار المادة' : null,
+        validator: (value) => (value == null) ? 'الرجاء اختيار المادة' : null, keyboardType: TextInputType.text,
       ),
       FormFieldConfig(
         name: 'lecture_date',
         label: 'تاريخ المحاضرة',
         type: FormFieldType.date, // نفترض أنك قمت بتحديث ReusableFormDialog لدعم التاريخ
-        validator: (value) => (value == null || value.isEmpty) ? 'الرجاء إدخال التاريخ' : null,
+        validator: (value) => (value == null || value.isEmpty) ? 'الرجاء إدخال التاريخ' : null, keyboardType: TextInputType.datetime,
       ),
       FormFieldConfig(
         name: 'notes',
         label: 'ملاحظات (اختياري)',
-        type: FormFieldType.text,
+        type: FormFieldType.text, keyboardType: TextInputType.text,
       ),
     ];
 

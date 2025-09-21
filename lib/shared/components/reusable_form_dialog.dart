@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:rafiqi_university/shared/components/components.dart';
 
 // 1. تعريف أنواع الحقول المتاحة
 enum FormFieldType { text, number, date, time, dropdown, DatePicker }
@@ -26,7 +27,7 @@ class FormFieldConfig {
     this.type = FormFieldType.text,
     this.initialValue,
     this.validator,
-    this.dropdownOptions, // تأكد من أن هذا النوع مدعوم
+    this.dropdownOptions, required TextInputType keyboardType, // تأكد من أن هذا النوع مدعوم
   });
 }
 
@@ -41,7 +42,8 @@ class ReusableFormDialog extends StatefulWidget {
     super.key,
     required this.title,
     required this.fields,
-    required this.onSave,
+    required this.onSave, 
+    // required Future<Null> Function(dynamic formData) onSubmit,
   });
 
   @override
@@ -158,6 +160,14 @@ class _ReusableFormDialogState extends State<ReusableFormDialog> {
       actions: [
         TextButton(onPressed: () => Navigator.of(context).pop(false), child: const Text('إلغاء')),
         ElevatedButton(onPressed: _handleSave, child: const Text('حفظ')),
+       DefaultSmallButton(
+        // onPressed: _handleSave, 
+        function: _handleSave,
+         text: 'حفظ',
+          child: const Text('حفظ'),
+          ),
+
+
       ],
     );
   }

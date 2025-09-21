@@ -16,7 +16,7 @@ dependencies:
   flutter:
     sdk: flutter
   
-  
+  flutter_slidable: ^3.1.0
   #animated_notch_bottom_bar: ^1.0.0
   cupertino_icons: ^1.0.8
   shared_preferences: ^2.5.3
@@ -64,3 +64,5 @@ flutter_launcher_icons:
   # تأكد من أن هذا المسار صحيح وأن الصورة موجودة فيه
   image_path: "assets/images/ic_launcher.png"
   min_sdk_android: 21
+dependency_overrides:
+  sqflite_platform_interface: any

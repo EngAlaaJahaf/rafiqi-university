@@ -23,5 +23,14 @@ class DepartmentsRepository {
     return result.map((json) => Department.fromMap(json)).toList();
   }
   
+  Future<int> update(Department department) async {
+    final db = await _dbService.database;
+    return await db.update('sem_departments', department.toMap(), where: 'dept_id = ?', whereArgs: [department.id]);
+  }
+
+  Future<int> delete(int id) async {
+    final db = await _dbService.database;
+    return await db.delete('sem_departments', where: 'dept_id = ?', whereArgs: [id]);
+  }
   // ... يمكنك إضافة باقي دوال CRUD (update, delete) حسب الحاجة
 }

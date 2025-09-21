@@ -22,4 +22,13 @@ class TeachersRepository {
     final result = await db.query('sem_teachers', orderBy: 'teach_name ASC');
     return result.map((json) => Teacher.fromMap(json)).toList();
   }
+  Future<int> update(Teacher teacher) async {
+    final db = await _dbService.database;
+    return await db.update('sem_teachers', teacher.toMap(), where: 'teach_id = ?', whereArgs: [teacher.id]);
+  }
+  Future<int> delete(int id) async {
+    final db = await _dbService.database;
+    return await db.delete('sem_teachers', where: 'teach_id = ?', whereArgs: [id]);
+  } 
+  
 }

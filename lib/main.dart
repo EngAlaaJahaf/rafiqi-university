@@ -90,6 +90,7 @@ class _MyAppState extends State<MyApp> {
 
         themeMode: isDarkMode ? ThemeMode.dark : ThemeMode.light,
         home: LoginScreen(toggleTheme: toggleTheme),
+        
       ),
     );
   }

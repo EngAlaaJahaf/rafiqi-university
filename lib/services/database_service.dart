@@ -16,7 +16,7 @@ class DatabaseService {
   Future<Database> _initDB(String filePath) async {
     final dbPath = await getDatabasesPath();
     final path = join(dbPath, filePath);
-    return await openDatabase(path, version: 2, onCreate: _createDB, onConfigure: _onConfigure);
+    return await openDatabase(path, version: 6, onCreate: _createDB, onConfigure: _onConfigure);
   }
 
   // تفعيل المفاتيح الخارجية (Foreign Keys)
@@ -60,7 +60,7 @@ class DatabaseService {
       CREATE TABLE sem_subjects (
         subj_id INTEGER PRIMARY KEY AUTOINCREMENT,
         subj_name TEXT NOT NULL,
-        subj_code TEXT NOT NULL UNIQUE,
+        subj_code TEXT NOT NULL,
         subj_credit_hours INTEGER
       )
     ''');
@@ -69,7 +69,7 @@ class DatabaseService {
       CREATE TABLE sem_teachers (
         teach_id INTEGER PRIMARY KEY AUTOINCREMENT,
         teach_name TEXT NOT NULL,
-        teach_email TEXT UNIQUE,
+        teach_email TEXT,
         teach_phone TEXT
       )
     ''');
@@ -92,8 +92,8 @@ class DatabaseService {
 
     batch.execute('''
       CREATE TABLE sem_lect_type (
-        lec_id INTEGER PRIMARY KEY AUTOINCREMENT,
-        lec_name TEXT NOT NULL UNIQUE
+        lect_type_id INTEGER PRIMARY KEY AUTOINCREMENT,
+        lect_type_name TEXT NOT NULL UNIQUE
       )
     ''');
 
@@ -103,7 +103,7 @@ class DatabaseService {
         user_id INTEGER PRIMARY KEY AUTOINCREMENT,
         username TEXT NOT NULL UNIQUE,
         full_name TEXT NOT NULL,
-        email TEXT UNIQUE,
+        email TEXT,
         password_hash TEXT NOT NULL,
         role TEXT NOT NULL DEFAULT 'student',
         dept_id INTEGER,

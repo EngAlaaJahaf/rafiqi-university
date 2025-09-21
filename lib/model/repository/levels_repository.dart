@@ -22,4 +22,13 @@ class LevelsRepository {
     final result = await db.query('sem_levels', orderBy: 'level_number ASC');
     return result.map((json) => Level.fromMap(json)).toList();
   }
+
+  Future<int> update(Level level) async {
+    final db = await _dbService.database;
+    return await db.update('sem_levels', level.toMap(), where: 'level_id = ?', whereArgs: [level.id]);
+  }
+  Future<int> delete(int id) async {
+    final db = await _dbService.database;
+    return await db.delete('sem_levels', where: 'level_id = ?', whereArgs: [id]);
+  }
 }

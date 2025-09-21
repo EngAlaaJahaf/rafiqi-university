@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:rafiqi_university/model/repository/subjects_repository.dart';
 import 'package:rafiqi_university/model/subject.dart';
-import 'package:rafiqi_university/services/database_service.dart';
 import 'package:rafiqi_university/shared/components/reusable_form_dialog.dart'; // استيراد الـ Widget الجديد
 
 
@@ -13,18 +12,18 @@ Future<bool?> showSubjectDialog(BuildContext context, {Subject? subject}) {
       name: 'name', // <-- استخدم 'name' كما في الموديل
       label: 'اسم المادة',
       initialValue: subject?.name,
-      validator: (value) => (value == null || value.isEmpty) ? 'الرجاء إدخال اسم المادة' : null,
+      validator: (value) => (value == null || value.isEmpty) ? 'الرجاء إدخال اسم المادة' : null, keyboardType: TextInputType.text,
     ),
     FormFieldConfig(
       name: 'code', // <-- استخدم 'code' كما في الموديل
       label: 'رمز المادة (اختياري)',
-      initialValue: subject?.code,
+      initialValue: subject?.code, keyboardType: TextInputType.text,
     ),
     FormFieldConfig(
       name: 'creditHours', // <-- استخدم 'creditHours' كما في الموديل
       label: 'عدد الساعات المعتمدة (اختياري)',
       // يجب تحويل الرقم إلى نص للعرض في الحقل
-      initialValue: subject?.creditHours?.toString(), 
+      initialValue: subject?.creditHours?.toString(), keyboardType: TextInputType.number, 
     ),
   ];
 

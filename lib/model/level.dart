@@ -5,7 +5,9 @@ class Level {
   final int number;
   final String name;
 
-  Level({this.id, required this.number, required this.name});
+  Level({this.id,
+   required this.number,
+    required this.name});
 
   Map<String, dynamic> toMap() => {
         'level_id': id,

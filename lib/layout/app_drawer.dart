@@ -1,5 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:rafiqi_university/modules/admin/add_class_room_page.dart';
+import 'package:rafiqi_university/modules/admin/add_department_page.dart';
 import 'package:rafiqi_university/modules/admin/add_lecture_type_page.dart';
+import 'package:rafiqi_university/modules/admin/add_level_page.dart';
+import 'package:rafiqi_university/modules/admin/add_teacher_page.dart';
+import 'package:rafiqi_university/modules/admin/add_user_page.dart';
+import 'package:rafiqi_university/modules/admin/admin_dashboard_screen.dart';
 import 'package:rafiqi_university/modules/admin/view_subjects_screen.dart';
 
 class AppDrawer extends StatelessWidget {
@@ -25,24 +31,33 @@ class AppDrawer extends StatelessWidget {
         children: [
           UserAccountsDrawerHeader(
             currentAccountPicture: const CircleAvatar(
-              backgroundImage: NetworkImage('https://picsum.photos/200' ),
+              backgroundImage: NetworkImage('https://picsum.photos/200'),
             ),
             accountName: const Text(
               'اسم المستخدم',
-              style: TextStyle(fontWeight: FontWeight.bold, color: Color.fromARGB(255, 13, 121, 121)),
+              style: TextStyle(
+                fontWeight: FontWeight.bold,
+                color: Color.fromARGB(255, 13, 121, 121),
+              ),
             ),
             accountEmail: const Text(
               'user.email@example.com',
-              style: TextStyle(fontWeight: FontWeight.bold, color: Color.fromARGB(255, 13, 121, 121)),
+              style: TextStyle(
+                fontWeight: FontWeight.bold,
+                color: Color.fromARGB(255, 13, 121, 121),
+              ),
             ),
             otherAccountsPictures: [
               IconButton(
-                  onPressed: toggleTheme,
-                  icon: const CircleAvatar(child: Icon(Icons.brightness_6_outlined))),
+                onPressed: toggleTheme,
+                icon: const CircleAvatar(
+                  child: Icon(Icons.brightness_6_outlined),
+                ),
+              ),
             ],
             decoration: const BoxDecoration(),
           ),
-          
+
           // --- عناصر التنقل الرئيسي ---
           ListTile(
             leading: const Icon(Icons.home_outlined),
@@ -89,17 +104,23 @@ class AppDrawer extends StatelessWidget {
             },
           ),
           ListTile(
-            leading: const Icon(Icons.category_rounded),
-            title: const Text('إدارة أنواع المحاضرات'),
+            leading: const Icon(Icons.admin_panel_settings_outlined),
+            title: const Text('لوحة تحكم المسؤول'),
             onTap: () {
               Navigator.pop(context);
+              // ✨ هنا يتم تمرير الدالة بشكل صحيح
               onSecondaryNavigate(
-                AddLectureTypePage(toggleTheme: toggleTheme),
-                'أنواع المحاضرات',
+                AdminDashboardScreen(
+                  onSecondaryNavigate:
+                      onSecondaryNavigate, // مرر الدالة مرة أخرى
+                  toggleTheme: toggleTheme,
+                ),
+
+                'لوحة التحكم',
               );
             },
           ),
-          
+
           const Divider(),
           ListTile(
             leading: const Icon(Icons.settings_outlined),

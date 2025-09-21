@@ -59,7 +59,7 @@ class _AddLectureTypePageState extends State<AddLectureTypePage> {
         label: 'نوع المحاضرة',
         initialValue: lectType?.name, // دعم التعديل
         type: FormFieldType.text,
-        validator: (value) => (value == null || value.isEmpty) ? 'الرجاء إدخال نوع المحاضرة' : null,
+        validator: (value) => (value == null || value.isEmpty) ? 'الرجاء إدخال نوع المحاضرة' : null, keyboardType: TextInputType.text,
       ),
     ];
 
@@ -116,8 +116,27 @@ class _AddLectureTypePageState extends State<AddLectureTypePage> {
                     icon: const Icon(Icons.delete, color: Colors.redAccent),
                     onPressed: () async {
                       // يمكنك إضافة نافذة تأكيد هنا
+                      final confirm = await showDialog<bool>(
+                        context: context,
+                        builder: (context) => AlertDialog(
+                          title: const Text('تأكيد الحذف'),
+                          content: const Text('هل أنت متأكد من حذف هذا النوع؟'),
+                          actions: [
+                            TextButton(
+                              onPressed: () => Navigator.of(context).pop(false),
+                              child: const Text('إلغاء'),
+                            ),
+                            TextButton(
+                              onPressed: () => Navigator.of(context).pop(true),
+                              child: const Text('حذف', style: TextStyle(color: Colors.red)),
+                            ),
+                          ],
+                        ),
+                      ) ?? false;
+                      if (confirm == true ) {
                       await LectureTypeRepository.instance.delete(lectType.id!);
                       _refreshLectureTypes();
+                    };
                     },
                   ),
                   // عند الضغط على العنصر، افتح نافذة التعديل

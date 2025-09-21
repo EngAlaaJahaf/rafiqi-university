@@ -1,10 +1,12 @@
 // lib/models/class_room.dart
 
+import 'dart:ui';
+
 class ClassRoom {
   final int? id;
   final String name;
 
-  ClassRoom({this.id, required this.name});
+  ClassRoom({this.id, required this.name, required VoidCallback toggleTheme});
 
   Map<String, dynamic> toMap() => {
         'cl_id': id,
@@ -13,6 +15,6 @@ class ClassRoom {
 
   factory ClassRoom.fromMap(Map<String, dynamic> map) => ClassRoom(
         id: map['cl_id'],
-        name: map['cl_name'],
+        name: map['cl_name'], toggleTheme: () {  },
       );
 }

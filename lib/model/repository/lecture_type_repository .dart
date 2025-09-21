@@ -1,6 +1,5 @@
 // lib/repositories/lectures_repository.dart
 import 'package:rafiqi_university/model/lect_type.dart';
-import 'package:rafiqi_university/model/lecture.dart';
 import 'package:rafiqi_university/services/Database_service.dart';
 
 class LectureTypeRepository {
@@ -18,17 +17,17 @@ class LectureTypeRepository {
     return await db.insert('sem_lect_type', lectType.toMap());
   }
 
-  // قراءة كل المحاضرات لمادة معينة
-  Future<List<LectType>> getForSubject(int lect_type_id) async {
-    final db = await _dbService.database;
-    final result = await db.query(
-      'sem_lect_type',
-      where: 'lect_type_id = ?',
-      whereArgs: [lect_type_id],
-      orderBy: 'lect_type_id ASC',
-    );
-    return result.map((json) => LectType.fromMap(json)).toList();
-  }
+  // // قراءة كل المحاضرات لمادة معينة
+  // Future<List<LectType>> getForSubject(int lect_type_id) async {
+  //   final db = await _dbService.database;
+  //   final result = await db.query(
+  //     'sem_lect_type',
+  //     where: 'lect_type_id = ?',
+  //     whereArgs: [lect_type_id],
+  //     orderBy: 'lect_type_id ASC',
+  //   );
+  //   return result.map((json) => LectType.fromMap(json)).toList();
+  // }
 
 // R - Read: قراءة كل المحاضرات
   Future<List<LectType>> getAll() async {

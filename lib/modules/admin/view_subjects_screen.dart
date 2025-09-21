@@ -83,14 +83,44 @@ class _ViewSubjectsScreenState extends State<ViewSubjectsScreen> {
               child: ListTile(
                 title: Text(subject.name, style: const TextStyle(fontWeight: FontWeight.bold)),
                 subtitle: Text('الرمز: ${subject.code ?? 'N/A'}\nعدد الساعات: ${subject.creditHours ?? 'N/A'}'),
-                trailing: IconButton(
-                  icon: const Icon(Icons.delete, color: Colors.red),
-                  onPressed: () async {
-                    await SubjectsRepository.instance.delete(subject.id!);
-                    _refreshSubjects();
-                  },
+                trailing: Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                      IconButton(
+                      icon: const Icon(Icons.edit, color: Color.fromARGB(255, 27, 176, 239)),
+                      onPressed: () => _openAddDialog(subject: subject),
+                    ),
+                    IconButton(
+                      icon: const Icon(Icons.delete, color: Colors.red),
+                      onPressed: () async {
+                        final confirm = await showDialog<bool>(
+                          context: context,
+                          builder: (context) => AlertDialog(
+                            title: const Text('تأكيد الحذف'),
+                            content: const Text('هل أنت متأكد من حذف هذه المادة ؟'),
+                            actions: [
+                              
+                              TextButton(
+                                onPressed: () => Navigator.of(context).pop(false),
+                                child: const Text('إلغاء'),
+                              ),
+                              TextButton(
+                                onPressed: () => Navigator.of(context).pop(true),
+                                child: const Text('حذف', style: TextStyle(color: Colors.red)),
+                              ),
+                            ],
+                          ),
+                        );
+                        if (confirm == true ) {
+                          await SubjectsRepository.instance.delete(subject.id!);
+                          _refreshSubjects();
+                        };
+                      },
+                    ),
+                  
+                  ],
                 ),
-                onTap: () => _openAddDialog(subject: subject),
+                // onTap: () => _openAddDialog(subject: subject),
               ),
             );
           },

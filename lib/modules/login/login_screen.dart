@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:get/get_core/src/get_main.dart';
 import 'package:rafiqi_university/layout/main_layout.dart';
-import 'package:rafiqi_university/layout/mainlayoutwidget.dart';
 import 'package:rafiqi_university/modules/login/login_controller.dart';
 import 'package:rafiqi_university/modules/login/signin.dart';
 import 'package:rafiqi_university/shared/components/components.dart';

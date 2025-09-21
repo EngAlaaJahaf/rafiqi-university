@@ -41,7 +41,7 @@ class _AddLecturePageState extends State<AddLecturePage> {
         label: 'المادة',
         type: FormFieldType.dropdown,
         dropdownOptions: subjectOptions,
-        validator: (value) => (value == null) ? 'الرجاء اختيار المادة' : null,
+        validator: (value) => (value == null) ? 'الرجاء اختيار المادة' : null, keyboardType: TextInputType.text,
       ),
       FormFieldConfig(
         name: 'lecture_date',
@@ -49,12 +49,12 @@ class _AddLecturePageState extends State<AddLecturePage> {
         // ملاحظة: هنا يجب استخدام منتقي تاريخ حقيقي، لكن للتبسيط سنستخدم حقل نصي
         // يمكنك لاحقًا تطوير ReusableFormDialog لدعم DatePicker
         type: FormFieldType.DatePicker, 
-        validator: (value) => (value == null || value.isEmpty) ? 'الرجاء إدخال التاريخ' : null,
+        validator: (value) => (value == null || value.isEmpty) ? 'الرجاء إدخال التاريخ' : null, keyboardType: TextInputType.datetime,
       ),
       FormFieldConfig(
         name: 'notes',
         label: 'ملاحظات (اختياري)',
-        type: FormFieldType.text,
+        type: FormFieldType.text, keyboardType: TextInputType.text,
       ),
     ];
 
