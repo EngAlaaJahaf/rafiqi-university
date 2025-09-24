@@ -1,13 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:rafiqi_university/modules/admin/add_class_room_page.dart';
-import 'package:rafiqi_university/modules/admin/add_department_page.dart';
-import 'package:rafiqi_university/modules/admin/add_lecture_type_page.dart';
-import 'package:rafiqi_university/modules/admin/add_level_page.dart';
-import 'package:rafiqi_university/modules/admin/add_teacher_page.dart';
-import 'package:rafiqi_university/modules/admin/add_user_page.dart';
 import 'package:rafiqi_university/modules/admin/admin_dashboard_screen.dart';
 import 'package:rafiqi_university/modules/admin/view_subjects_screen.dart';
 import 'package:rafiqi_university/modules/dashboard/webview_screen.dart';
+import 'package:rafiqi_university/modules/room_classes/view_lectures_page.dart';
 
 class AppDrawer extends StatelessWidget {
   final int bottomNavIndex;
@@ -118,6 +113,17 @@ class AppDrawer extends StatelessWidget {
               );
             },
           ),
+          ListTile(
+  leading: const Icon(Icons.calendar_today_outlined),
+  title: const Text('جدول المحاضرات'),
+  onTap: () {
+    Navigator.pop(context);
+    onSecondaryNavigate(
+      ViewLecturesPage(toggleTheme: toggleTheme),
+      'جدول المحاضرات',
+    );
+  },
+),
           ListTile(
             leading: const Icon(Icons.admin_panel_settings_outlined),
             title: const Text('لوحة تحكم المسؤول'),

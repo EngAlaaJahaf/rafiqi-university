@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart'; // 1. استيراد Provider
 import 'package:rafiqi_university/layout/fab_view_model.dart'; // 2. استيراد الـ ViewModel
-import 'package:rafiqi_university/model/lect_type.dart';
-import 'package:rafiqi_university/model/repository/lecture_type_repository%20.dart';
+import 'package:rafiqi_university/model/lecture_type.dart';
+import 'package:rafiqi_university/model/repository/lecture_types_repository.dart';
 // import 'package:rafiqi_university/lib/model/repository/lecture_type_repository.dart';
 // import 'package:rafiqi_university/model/repository/lecture_type_repository.dart';
 import 'package:rafiqi_university/shared/components/reusable_form_dialog.dart';

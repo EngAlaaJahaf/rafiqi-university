@@ -21,4 +21,11 @@ class FabViewModel extends ChangeNotifier {
     // وأنه يجب عليها إعادة بناء نفسها لتعكس هذا التغيير (إظهار/إخفاء/تغيير وظيفة الزر).
     notifyListeners();
   }
+   void clearFabAction() {
+    if (_fabAction != null) {
+      _fabAction = null;
+      notifyListeners();
+    }
+  }
+
 }

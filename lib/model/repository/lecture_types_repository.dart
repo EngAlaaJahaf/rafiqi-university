@@ -1,5 +1,5 @@
 // lib/repositories/lectures_repository.dart
-import 'package:rafiqi_university/model/lect_type.dart';
+import 'package:rafiqi_university/model/lecture_type.dart';
 import 'package:rafiqi_university/services/Database_service.dart';
 
 class LectureTypeRepository {
