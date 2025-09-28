@@ -24,13 +24,13 @@ dependencies:
   path_provider: ^2.1.5
   animated_notch_bottom_bar: ^1.0.3
   intl: ^0.20.2
-  get: ^4.6.6 #حزمة GetX
-  flutter_test:
-    sdk: flutter
   provider: ^6.1.5+1
   http: ^1.5.0
   badges: ^3.1.2
   webview_flutter: ^4.13.0
+  firebase_core: ^4.1.1
+  firebase_auth: ^6.1.0
+  cloud_firestore: ^6.0.2
 
 dev_dependencies:
   flutter_launcher_icons: ^0.13.1

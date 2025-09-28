@@ -1,68 +1,96 @@
-// notifications_page.dart
-
 import 'package:flutter/material.dart';
 import 'package:rafiqi_university/model/REST/notification_rest.dart';
 import 'package:rafiqi_university/services/api_service.dart';
-// استيراد النموذج
+import 'package:rafiqi_university/shared/components/notification_card.dart';
 
 class NotificationsPage extends StatefulWidget {
-   final VoidCallback toggleTheme;
+  final VoidCallback toggleTheme;
   const NotificationsPage({super.key, required this.toggleTheme});
+
   @override
   _NotificationsPageState createState() => _NotificationsPageState();
 }
 
 class _NotificationsPageState extends State<NotificationsPage> {
-  late Future<List<NotificationModel>> futureNotifications;
-  final ApiService apiService = ApiService();
+  late Future<List<NotificationRest>> _futureNotifications;
+  final ApiService _apiService = ApiService();
 
   @override
   void initState() {
     super.initState();
-    // بدء عملية جلب البيانات عند تحميل الصفحة
-    futureNotifications = apiService.fetchNotifications();
+    _loadNotifications();
+  }
+
+  void _loadNotifications() {
+    setState(() {
+      _futureNotifications = _apiService.getNotifications();
+    });
+  }
+
+  Future<void> _deleteNotification(int notifId) async {
+    try {
+      await _apiService.deleteNotification(notifId);
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('تم حذف الإشعار بنجاح'), backgroundColor: Colors.green),
+      );
+      _loadNotifications();
+    } catch (e) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('فشل في حذف الإشعار: $e'), backgroundColor: Colors.red),
+      );
+    }
+  }
+
+  void _toggleReadStatus(NotificationRest notification) {
+    setState(() {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('تم تغيير حالة الإشعار (واجهة فقط)')),
+      );
+    });
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      // appBar: AppBar(
-      //   title: Text('الإشعارات'),
-      // ),
-      body: FutureBuilder<List<NotificationModel>>(
-        future: futureNotifications,
-        builder: (context, snapshot) {
-          if (snapshot.connectionState == ConnectionState.waiting) {
-            // عرض مؤشر تحميل أثناء جلب البيانات
-            return Center(child: CircularProgressIndicator());
-          } else if (snapshot.hasError) {
-            // عرض رسالة خطأ في حال فشل الطلب
-            return Center(child: Text('خطأ: ${snapshot.error}'));
-          } else if (snapshot.hasData) {
-            // عرض البيانات في ListView عند نجاح الطلب
-            List<NotificationModel> notifications = snapshot.data!;
+      body: RefreshIndicator(
+        onRefresh: () async => _loadNotifications(),
+        child: FutureBuilder<List<NotificationRest>>(
+          future: _futureNotifications,
+          builder: (context, snapshot) {
+            if (snapshot.connectionState == ConnectionState.waiting) {
+              return const Center(child: CircularProgressIndicator());
+            }
+            if (snapshot.hasError) {
+              return Center(
+                child: Padding(
+                  padding: const EdgeInsets.all(16.0),
+                  child: Text('خطأ في جلب البيانات: ${snapshot.error}'),
+                ),
+              );
+            }
+            if (!snapshot.hasData || snapshot.data!.isEmpty) {
+              return const Center(child: Text('لا توجد إشعارات لعرضها.'));
+            }
+
+            final notifications = snapshot.data!;
             return ListView.builder(
+              padding: const EdgeInsets.only(top: 8, bottom: 80),
               itemCount: notifications.length,
               itemBuilder: (context, index) {
                 final notification = notifications[index];
-                return ListTile(
-                  leading: Icon(
-                    notification.isRead ? Icons.notifications_off : Icons.notifications_active,
-                    color: notification.isRead ? Colors.grey : Theme.of(context).primaryColor,
-                  ),
-                  title: Text(notification.notifMessage),
-                  subtitle: Text(
-                    '${notification.notifRelatedEntity} - ${notification.notifDate.toLocal().toString().substring(0, 10)}'
-                  ),
-                  trailing: Text('المستخدم: ${notification.userId}'),
+                // ✨ تم التعديل هنا: لم نعد نمرر التاريخ إلى البطاقة
+                return NotificationCard(
+                  message: notification.notifMessage,
+                  relatedEntity: notification.notifRelatedEntity,
+                  // date: notification.notifDate, // <-- تم حذف هذا السطر
+                  isRead: notification.isRead,
+                  onDelete: () => _deleteNotification(notification.notifId),
+                  onToggleRead: () => _toggleReadStatus(notification),
                 );
               },
             );
-          } else {
-            // عرض رسالة في حال عدم وجود بيانات
-            return Center(child: Text('لا توجد إشعارات'));
-          }
-        },
+          },
+        ),
       ),
     );
   }

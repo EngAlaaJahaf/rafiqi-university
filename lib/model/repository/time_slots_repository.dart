@@ -1,5 +1,4 @@
 // lib/repositories/assignments_repository.dart
-import 'package:rafiqi_university/model/assignment.dart';
 import 'package:rafiqi_university/model/time_slot.dart';
 import 'package:rafiqi_university/services/Database_service.dart';
 

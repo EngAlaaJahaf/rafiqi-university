@@ -1,8 +1,10 @@
+// lib/screens/home_screen.dart
+
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
-import 'package:provider/provider.dart'; // 1. استيراد Provider
-import 'package:rafiqi_university/layout/fab_view_model.dart'; // 2. استيراد الـ ViewModel
-import 'package:rafiqi_university/modules/login/login_controller.dart';
+import 'package:provider/provider.dart';
+import 'package:rafiqi_university/layout/fab_view_model.dart';
+import 'package:rafiqi_university/services/auth_service.dart';
 
 class HomeScreen extends StatefulWidget {
   final VoidCallback toggleTheme;
@@ -16,7 +18,7 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   void initState() {
     super.initState();
-    // 3. أخبر الـ ViewModel أنه لا يوجد زر عائم لهذه الشاشة
+    // إخفاء الزر العائم عند الدخول لهذه الشاشة
     WidgetsBinding.instance.addPostFrameCallback((_) {
       Provider.of<FabViewModel>(context, listen: false).setFabAction(null);
     });
@@ -24,7 +26,13 @@ class _HomeScreenState extends State<HomeScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final LoginController loginController = Get.find<LoginController>();
+    // 1. الوصول لخدمة المصادقة
+    final authService = Provider.of<AuthService>(context, listen: false);
+
+    // 2. الحصول على المستخدم الحالي مباشرة.
+    // بما أننا لا نصل لهذه الشاشة إلا والمستخدم مسجل دخوله،
+    // فمن الآمن افتراض أن authService.currentUser ليس null.
+    final User? currentUser = authService.currentUser;
 
     return Center(
       child: Column(
@@ -35,20 +43,39 @@ class _HomeScreenState extends State<HomeScreen> {
             style: TextStyle(fontSize: 40, fontWeight: FontWeight.bold),
           ),
           const SizedBox(height: 30),
-          Obx(() {
-            return Card(
-              elevation: 4,
-              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
-              child: Padding(
-                padding: const EdgeInsets.symmetric(vertical: 15.0, horizontal: 25.0),
-                child: Text(
-                  'إجمالي مرات تسجيل الدخول: ${loginController.loginCount.value}',
-                  style: const TextStyle(fontSize: 20, fontWeight: FontWeight.w500),
-                  textAlign: TextAlign.center,
-                ),
-              ),
-            );
-          }),
+
+          // 3. عرض بيانات المستخدم مباشرة بدون أي تعقيد
+          // إذا كان currentUser لسبب ما null، نعرض رسالة خطأ بسيطة.
+          // if (currentUser != null)
+          //   Card(
+          //     elevation: 4,
+          //     shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+          //     child: Padding(
+          //       padding: const EdgeInsets.symmetric(vertical: 15.0, horizontal: 25.0),
+          //       child: Text(
+          //         'مرحباً بك،\n${currentUser.email}',
+          //         style: const TextStyle(fontSize: 20, fontWeight: FontWeight.w500),
+          //         textAlign: TextAlign.center,
+          //       ),
+          //     ),
+          //   )
+          // else
+          //   // هذا الجزء لن يظهر في الحالة الطبيعية، لكنه موجود كاحتياط
+          //   const Text('خطأ: لم يتم العثور على بيانات المستخدم.'),
+
+          // const SizedBox(height: 20),
+
+          // ElevatedButton.icon(
+          //   icon: const Icon(Icons.logout),
+          //   label: const Text('تسجيل الخروج'),
+          //   onPressed: () async {
+          //     await authService.signOut();
+          //   },
+          //   style: ElevatedButton.styleFrom(
+          //     backgroundColor: Theme.of(context).colorScheme.error,
+          //     foregroundColor: Theme.of(context).colorScheme.onError,
+          //   ),
+          // )
         ],
       ),
     );

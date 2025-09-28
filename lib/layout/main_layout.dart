@@ -5,6 +5,7 @@ import 'package:provider/provider.dart';
 import 'package:rafiqi_university/layout/app_drawer.dart';
 import 'package:rafiqi_university/layout/custom_bottom_nav_bar.dart';
 import 'package:rafiqi_university/layout/fab_view_model.dart';
+import 'package:rafiqi_university/modules/admin/add_notification_page.dart';
 import 'package:rafiqi_university/modules/admin/admin_dashboard_screen.dart';
 import 'package:rafiqi_university/modules/dashboard/profile_screen.dart';
 import 'package:rafiqi_university/modules/dashboard/settings_screen.dart';
@@ -116,7 +117,9 @@ class _MainLayoutWidgetState extends State<MainLayoutWidget> {
               : null,
           title: Text(currentScreenState.title),
           centerTitle: true,
-          actions: [
+          actions: [IconButton(
+           onPressed: () {Navigator.push(context, MaterialPageRoute(builder: (context) => NotificationsPage(toggleTheme: widget.toggleTheme),),);},
+            icon: Icon(Icons.notifications_outlined, color: theme.colorScheme.onPrimary,),),
             Builder(
               builder: (context) => IconButton(
                 icon: const Icon(Icons.menu),

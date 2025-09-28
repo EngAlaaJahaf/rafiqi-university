@@ -1,19 +1,12 @@
+// lib/modules/login/login_screen.dart
+
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
-import 'package:rafiqi_university/layout/main_layout.dart';
-import 'package:rafiqi_university/modules/login/login_controller.dart';
+import 'package:provider/provider.dart';
 import 'package:rafiqi_university/modules/login/signin.dart';
-import 'package:rafiqi_university/shared/components/components.dart';
-// import 'package:rafiqi_university/layout/main_layout.dart' ; // 1. تأكد من صحة هذا المسار
-import 'package:shared_preferences/shared_preferences.dart';
+import 'package:rafiqi_university/services/auth_service.dart';
 
-// استورد أي components أخرى تحتاجها
-// import '../../shared/components/components.dart';
-
-// 2. تم تعديل الكلاس ليستقبل دالة تغيير الثيم
 class LoginScreen extends StatefulWidget {
   final VoidCallback toggleTheme;
-
   const LoginScreen({super.key, required this.toggleTheme});
 
   @override
@@ -21,127 +14,166 @@ class LoginScreen extends StatefulWidget {
 }
 
 class _LoginScreenState extends State<LoginScreen> {
-   final LoginController loginController = Get.put(LoginController());
-  final emailController = TextEditingController();
-  final passwordController = TextEditingController();
-  bool isPasswordVisible = false;
+  final _formKey = GlobalKey<FormState>();
+  final _emailController = TextEditingController();
+  final _passwordController = TextEditingController();
 
-  // دالة حفظ البيانات (جيدة كما هي)
-  Future<void> _saveUserData(String email, String password) async {
-    final prefs = await SharedPreferences.getInstance();
-    await prefs.setString('email', email);
-    await prefs.setString('password', password);
-     await loginController.incrementLoginCount();  //زيادة مرات تسجيل الدخول
+  bool _isLoading = false;
+  String? _errorMessage;
+  bool _isPasswordVisible = false;
 
+  Future<void> _login() async {
+    if (_formKey.currentState?.validate() ?? false) {
+      setState(() {
+        _isLoading = true;
+        _errorMessage = null;
+      });
+
+      final authService = Provider.of<AuthService>(context, listen: false);
+
+      try {
+        final user = await authService.signInWithEmailAndPassword(
+          _emailController.text.trim(),
+          _passwordController.text.trim(),
+          context,
+        );
+
+        if (user == null) {
+          throw Exception('فشل تسجيل الدخول.');
+        }
+        // عند النجاح، لا تفعل شيئاً هنا. StreamBuilder سيتولى الأمر.
+
+      } catch (e) {
+        // إذا فشل تسجيل الدخول، ستبقى الواجهة على الشاشة، لذا من الآمن استدعاء setState
+        if (mounted) {
+          setState(() {
+            _errorMessage = 'البريد الإلكتروني أو كلمة المرور غير صحيحة.';
+          });
+        }
+      } finally {
+        // تحقق دائماً من أن الواجهة موجودة قبل استدعاء setState
+        if (mounted) {
+          setState(() {
+            _isLoading = false;
+          });
+        }
+      }
+    }
   }
 
-  // دالة لتسجيل الدخول
-  Future<void> _login() async {
-    // يمكنك هنا إضافة منطق التحقق من اسم المستخدم وكلمة المرور
-    print(emailController.text);
-    print(passwordController.text);
-
-    // 3. انتظر حتى يتم حفظ البيانات قبل الانتقال
-    await _saveUserData(emailController.text, passwordController.text);
-
-    // 4. تحقق من أن الـ context لا يزال صالحاً قبل التنقل (ممارسة جيدة)
-    if (!mounted) return;
-
-    // 5. انتقل إلى الهيكل الرئيسي ومرر له الدالة الحقيقية
-    Navigator.of(context).pushReplacement(
-      MaterialPageRoute(
-        builder: (context) => MainLayoutWidget(toggleTheme: widget.toggleTheme),
-      ),
-    );
+  @override
+  void dispose() {
+    _emailController.dispose();
+    _passwordController.dispose();
+    super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
+    // ... (باقي كود بناء الواجهة يبقى كما هو تماماً)
     return Scaffold(
-      appBar: AppBar(title: const Text('تسجيل الدخول'), centerTitle: true),
-      body: Padding(
-        padding: const EdgeInsets.all(20.0),
-        child: Center(
-          child: SingleChildScrollView(
+      body: Center(
+        child: SingleChildScrollView(
+          padding: const EdgeInsets.all(24.0),
+          child: Form(
+            key: _formKey,
             child: Column(
-              crossAxisAlignment: CrossAxisAlignment.stretch, // لجعل الزر يمتد
+              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
-                const Text(
-                  'مرحباً بك',
+                Text(
+                  'رفيقي الجامعي',
                   textAlign: TextAlign.center,
-                  style: TextStyle(fontSize: 32, fontWeight: FontWeight.bold),
-                ),
-                const SizedBox(height: 40),
-
-                TextFormField(
-                  controller: emailController,
-                  keyboardType: TextInputType.emailAddress,
-                  decoration: const InputDecoration(
-                    labelText: "اسم المستخدم",
-                    prefixIcon: Icon(Icons.mail_outline),
-                    border: OutlineInputBorder(),
+                  style: TextStyle(
+                    fontSize: 32,
+                    fontWeight: FontWeight.bold,
+                    color: Theme.of(context).colorScheme.primary,
                   ),
                 ),
-                const SizedBox(height: 20),
+                const SizedBox(height: 8),
+                Text(
+                  'مرحباً بعودتك! قم بتسجيل الدخول للمتابعة',
+                  textAlign: TextAlign.center,
+                  style: Theme.of(context).textTheme.titleMedium,
+                ),
+                const SizedBox(height: 40),
                 TextFormField(
-                  controller: passwordController,
-                  keyboardType: TextInputType.visiblePassword,
-                  obscureText: !isPasswordVisible, // التحكم في الإظهار والإخفاء
+                  controller: _emailController,
+                  decoration: const InputDecoration(
+                    labelText: 'البريد الإلكتروني',
+                    prefixIcon: Icon(Icons.email_outlined),
+                    border: OutlineInputBorder(),
+                  ),
+                  keyboardType: TextInputType.emailAddress,
+                  validator: (value) {
+                    if (value == null || value.isEmpty || !value.contains('@')) {
+                      return 'الرجاء إدخال بريد إلكتروني صحيح';
+                    }
+                    return null;
+                  },
+                ),
+                const SizedBox(height: 16),
+                TextFormField(
+                  controller: _passwordController,
+                  obscureText: !_isPasswordVisible,
                   decoration: InputDecoration(
-                    labelText: "كلمة المرور",
+                    labelText: 'كلمة المرور',
                     prefixIcon: const Icon(Icons.lock_outline),
-                    // 6. تم تفعيل زر إظهار/إخفاء كلمة المرور
+                    border: const OutlineInputBorder(),
                     suffixIcon: IconButton(
                       icon: Icon(
-                        isPasswordVisible
-                            ? Icons.visibility_off
-                            : Icons.visibility,
+                        _isPasswordVisible ? Icons.visibility_off : Icons.visibility,
                       ),
                       onPressed: () {
                         setState(() {
-                          isPasswordVisible = !isPasswordVisible;
+                          _isPasswordVisible = !_isPasswordVisible;
                         });
                       },
                     ),
-                    border: const OutlineInputBorder(),
                   ),
-                ),
-                const SizedBox(height: 30),
-
-                // 7. تم تعديل زر الدخول ليستدعي دالة _login
-                DefaultButton(
-                  emailController: emailController,
-                  passwordController: passwordController,
-                  onPressed: _login, // استدعاء دالة تسجيل الدخول
-                  child: const Text('دخــول'),
-                  function: () {
-                    _login;
-                    _saveUserData(emailController.text,passwordController.text);
-                    Navigator.of(context).pushReplacement(
-                      MaterialPageRoute(
-                        builder: (context) =>
-                            MainLayoutWidget(toggleTheme: widget.toggleTheme),
-                      ),
-                    );
+                  validator: (value) {
+                    if (value == null || value.isEmpty) {
+                      return 'الرجاء إدخال كلمة المرور';
+                    }
+                    return null;
                   },
-                  text: 'دخــول',
                 ),
-
-                const SizedBox(height: 10),
+                const SizedBox(height: 24),
+                if (_errorMessage != null)
+                  Padding(
+                    padding: const EdgeInsets.only(bottom: 16.0),
+                    child: Text(
+                      _errorMessage!,
+                      style: TextStyle(color: Theme.of(context).colorScheme.error),
+                      textAlign: TextAlign.center,
+                    ),
+                  ),
+                _isLoading
+                    ? const Center(child: CircularProgressIndicator())
+                    : ElevatedButton(
+                        onPressed: _login,
+                        style: ElevatedButton.styleFrom(
+                          padding: const EdgeInsets.symmetric(vertical: 16),
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(8),
+                          ),
+                        ),
+                        child: const Text('تسجيل الدخول', style: TextStyle(fontSize: 16)),
+                      ),
+                const SizedBox(height: 16),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     const Text('ليس لديك حساب؟'),
                     TextButton(
                       onPressed: () {
-                        // يمكنك هنا الانتقال إلى شاشة إنشاء حساب
                         Navigator.of(context).pushReplacement(
-                      MaterialPageRoute(
-                        builder: (context) =>
-                            SignInScreen(toggleTheme: widget.toggleTheme),
-                      ),);
+                          MaterialPageRoute(
+                            builder: (context) => SignInScreen(toggleTheme: widget.toggleTheme),
+                          ),
+                        );
                       },
-                      child: const Text('إنشاء حساب'),
+                      child: const Text('إنشاء حساب جديد'),
                     ),
                   ],
                 ),

@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "772477171251",
+    "project_id": "rafiqi-university",
+    "storage_bucket": "rafiqi-university.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:772477171251:android:e8a60d50e4842380765546",
+        "android_client_info": {
+          "package_name": "com.example.rafiqi_university"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDKKEopGk3qDMRf7z8iASte4CrduZuzDgo"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
